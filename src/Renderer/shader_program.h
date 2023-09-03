@@ -14,10 +14,11 @@ namespace Renderer {
 		ShaderProgram& operator=(ShaderProgram&& shader_program) noexcept;
 		ShaderProgram(ShaderProgram&& shader_program) noexcept;
 		~ShaderProgram ();
+
 		bool IsCompiled() const { return is_compiled_; }
 		void Use() const;
+		void SetInt(const std::string& name, const GLint value);
 
-		//ShaderProgram() = default;
 	private:
 		bool CreateShader(const std::string& source, const GLenum shader_type, GLuint& ID);
 		bool is_compiled_{ false };
