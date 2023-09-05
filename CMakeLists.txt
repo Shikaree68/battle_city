@@ -22,9 +22,14 @@ add_executable(${PROJECT_NAME}
     src/Renderer/shader_program.h
     src/Renderer/texture_2D.cpp
     src/Renderer/texture_2D.h
+    src/Renderer/sprite.cpp
+    src/Renderer/sprite.h
+
     src/Resources/resource_manager.cpp
     src/Resources/resource_manager.h
     src/Resources/stb_image.h
+    res/shaders/vertex.vert
+    res/shaders/fragment.frag
 )
 
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
