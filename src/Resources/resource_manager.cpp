@@ -14,9 +14,22 @@
 #define STBI_ONLY_PNG
 #include "stb_image.h"
 
-ResourceManager::ResourceManager(const std::string& executable_path){
+ResourceManager::ShaderProgramsMap ResourceManager::shader_programs_;
+ResourceManager::TexturesMap ResourceManager::textures_;
+ResourceManager::SpritesMap ResourceManager::sprites_;
+ResourceManager::AnimatedSpritesMap ResourceManager::animated_sprites_;
+std::string ResourceManager::path_;
+
+void ResourceManager::SetExecutablePath(const std::string& executable_path){
 	size_t found = executable_path.find_last_of("/\\");
 	path_ = executable_path.substr(0, found);
+}
+
+void ResourceManager::UnloadAllResources(){
+	shader_programs_.clear();
+	textures_.clear();
+	sprites_.clear();
+	animated_sprites_.clear();
 }
 
 std::shared_ptr<Renderer::ShaderProgram> ResourceManager::LoadShaders(const std::string& shader_name,
@@ -175,7 +188,7 @@ std::shared_ptr<Renderer::Texture2D> ResourceManager::LoadTextureAtlas(const std
 	return texture;
 }
 
-std::string ResourceManager::GetFileString(const std::string& relative_path) const{
+std::string ResourceManager::GetFileString(const std::string& relative_path) {
 	std::ifstream ifs;
 	ifs.open(path_ + '/' + relative_path.c_str(), std::ios::in | std::ios::binary);
 	if(!ifs.is_open()){

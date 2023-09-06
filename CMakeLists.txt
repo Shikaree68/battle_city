@@ -30,6 +30,9 @@ add_executable(${PROJECT_NAME}
     src/Resources/resource_manager.cpp
     src/Resources/resource_manager.h
     src/Resources/stb_image.h
+
+    src/Game/game.cpp
+    src/Game/game.h
     res/shaders/vertex.vert
     res/shaders/fragment.frag
 )
