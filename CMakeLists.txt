@@ -24,6 +24,8 @@ add_executable(${PROJECT_NAME}
     src/Renderer/texture_2D.h
     src/Renderer/sprite.cpp
     src/Renderer/sprite.h
+    src/Renderer/animated_sprite.cpp
+    src/Renderer/animated_sprite.h
 
     src/Resources/resource_manager.cpp
     src/Resources/resource_manager.h
