@@ -33,6 +33,8 @@ add_executable(${PROJECT_NAME}
 
     src/Game/game.cpp
     src/Game/game.h
+    src/Game/tank.cpp
+    src/Game/tank.h
     res/shaders/vertex.vert
     res/shaders/fragment.frag
 )

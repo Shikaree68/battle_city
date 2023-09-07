@@ -1,7 +1,10 @@
 #pragma once
 
 #include <array>
+#include <memory>
 #include <glm/vec2.hpp>
+
+class Tank;
 
 class Game{
 public:
@@ -18,9 +21,10 @@ private:
 
 	enum class GameState{
 		Active,
-		Pause
+		Pause,
 	};
 
 	GameState current_state_;
 	glm::ivec2 window_size_;
+	std::unique_ptr<Tank> tank_;
 };
