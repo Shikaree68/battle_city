@@ -1,5 +1,7 @@
 #pragma once
 
+#include "vertex_buffer.h"
+#include "index_buffer.h"
 
 #include <glad/glad.h>
 #include <glm/vec2.hpp>
@@ -35,8 +37,10 @@ class Sprite {
   glm::vec2 size_;
   float rotation_;
   GLuint vao_;
-  // объединить в один
-  GLuint vertex_coords_vbo_;
-  GLuint texture_coords_vbo_;
+
+  VertexBuffer vertex_coords_buffer_;
+  VertexBuffer texuter_coords_buffer_;
+  IndexBuffer index_buffer_;
+
 };
 }  // namespace Renderer

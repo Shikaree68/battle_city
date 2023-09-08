@@ -25,14 +25,9 @@ void AnimatedSprite::Render() const{
 			sub_texture.left_bottom_UV.x, sub_texture.left_bottom_UV.y,
 			sub_texture.left_bottom_UV.x, sub_texture.right_top_UV.y,
 			sub_texture.right_top_UV.x, sub_texture.right_top_UV.y,
-
-			sub_texture.right_top_UV.x, sub_texture.right_top_UV.y,
 			sub_texture.right_top_UV.x, sub_texture.left_bottom_UV.y,
-			sub_texture.left_bottom_UV.x, sub_texture.left_bottom_UV.y,
 		};
-		glBindBuffer(GL_ARRAY_BUFFER, texture_coords_vbo_);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(texture_coords), texture_coords);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		texuter_coords_buffer_.Update(texture_coords, 2 * 4 * sizeof(GLfloat));
 		dirty_state_ = false;
 	}
 	Sprite::Render();
