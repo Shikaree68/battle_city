@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-namespace Renderer{
+namespace RenderEngine{
 ShaderProgram::ShaderProgram(const std::string& vertex_shader, const std::string& fragment_shader){
 	GLuint vertex_shader_id;
 	if( !CreateShader(vertex_shader, GL_VERTEX_SHADER, vertex_shader_id) ){

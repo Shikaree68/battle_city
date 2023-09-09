@@ -6,7 +6,7 @@
 #include <glad/glad.h>
 #include <stdint.h>
 
-namespace Renderer {
+namespace RenderEngine {
 
 class VertexArray{
 public:

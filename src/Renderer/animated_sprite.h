@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-namespace Renderer{
+namespace RenderEngine{
 
 class AnimatedSprite: public Sprite{
 public:

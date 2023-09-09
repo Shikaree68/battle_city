@@ -5,7 +5,7 @@
 #include <stdint.h>
 #include <vector>
 
-namespace Renderer {
+namespace RenderEngine {
 struct VertexBufferLayoutElement{
 	GLint count;
 	GLenum type;

@@ -1,6 +1,6 @@
 #include "vertex_buffer.h"
 
-namespace Renderer{
+namespace RenderEngine{
 VertexBuffer::VertexBuffer(): index_(0){}
 VertexBuffer::~VertexBuffer(){
 	glDeleteBuffers(1, &index_);

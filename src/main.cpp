@@ -7,6 +7,7 @@
 
 #include "Game/game.h"
 #include "Resources/resource_manager.h"
+#include "Renderer/renderer.h"
 
 using namespace std::literals;
 
@@ -22,7 +23,7 @@ Game game(WINDOW_SIZE);
 void glfwWindowSizeCallback(GLFWwindow* window, int width, int height){
 	WINDOW_SIZE.x = width;
 	WINDOW_SIZE.y = height;
-	glViewport(0, 0, WINDOW_SIZE.x, WINDOW_SIZE.y);
+	RenderEngine::Renderer::SetViewport(WINDOW_SIZE.x, WINDOW_SIZE.y);
 }
 
 void glfwKeyCallback(GLFWwindow* p_window, int key, int scancode, int action,
@@ -61,10 +62,10 @@ int main(int argc, char** argv){
 	if(!gladLoadGL()){
 		std::cout << "Can't load GLAD"sv << std::endl;
 	}
-	std::cout << "Renderer: "sv << glGetString(GL_RENDERER) << std::endl;
-	std::cout << "OpenGL version: "sv << glGetString(GL_VERSION) << std::endl;
+	std::cout << "Renderer: "sv << RenderEngine::Renderer::GetRenderType() << std::endl;
+	std::cout << "OpenGL version: "sv << RenderEngine::Renderer::GetRenderVersion() << std::endl;
 
-	glClearColor(0, 0, 0, 1);
+	RenderEngine::Renderer::SetClearColor(0, 0, 0, 1);
 	{
 		ResourceManager::SetExecutablePath(argv[0]);		
 		game.Initialize();
@@ -78,7 +79,7 @@ int main(int argc, char** argv){
 			game.Update(duration);
 
 			/* Render here */
-			glClear(GL_COLOR_BUFFER_BIT);
+			RenderEngine::Renderer::Clear();
 
 			game.Render();
 

@@ -34,6 +34,8 @@ add_executable(${PROJECT_NAME}
     src/Renderer/vertex_array.h
     src/Renderer/vertex_buffer_layout.cpp
     src/Renderer/vertex_buffer_layout.h
+    src/Renderer/renderer.cpp
+    src/Renderer/renderer.h
 
     src/Resources/resource_manager.cpp
     src/Resources/resource_manager.h
