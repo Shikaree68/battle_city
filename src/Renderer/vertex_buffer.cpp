@@ -5,12 +5,12 @@ VertexBuffer::VertexBuffer(): index_(0){}
 VertexBuffer::~VertexBuffer(){
 	glDeleteBuffers(1, &index_);
 }
-VertexBuffer& VertexBuffer::operator=(VertexBuffer&& vertex_buffer){
+VertexBuffer& VertexBuffer::operator=(VertexBuffer&& vertex_buffer) noexcept {
 	index_ = vertex_buffer.index_;
 	vertex_buffer.index_ = 0;
 	return *this;
 }
-VertexBuffer::VertexBuffer(VertexBuffer&& vertex_buffer){
+VertexBuffer::VertexBuffer(VertexBuffer&& vertex_buffer) noexcept{
 	index_ = vertex_buffer.index_;
 	vertex_buffer.index_ = 0;
 }

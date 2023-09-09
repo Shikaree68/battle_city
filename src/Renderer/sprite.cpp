@@ -48,28 +48,22 @@ Sprite::Sprite(std::shared_ptr<Texture2D> texture,
 		2, 3, 0,
 	};
 
-	glGenVertexArrays(1, &vao_);
-	glBindVertexArray(vao_);
-
 	vertex_coords_buffer_.Initialize(vertex_coords, 2 * 4 * sizeof(GLfloat));
-
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+	VertexBufferLayout vertex_coords_layout;
+	vertex_coords_layout.AddElementLayoutFloat(2, false);
+	vertex_array_.AddBuffer(vertex_coords_buffer_, vertex_coords_layout);
 
 	texuter_coords_buffer_.Initialize(texture_coords, 2 * 4 * sizeof(GLfloat));
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+	VertexBufferLayout texture_coords_layout;
+	texture_coords_layout.AddElementLayoutFloat(2, false);
+	vertex_array_.AddBuffer(texuter_coords_buffer_, texture_coords_layout);
 
 	index_buffer_.Initialize(indices, 6 * sizeof(GLuint));
-
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	vertex_array_.Unbind();
+	index_buffer_.Unbind();
 }
-Sprite::~Sprite(){
-	glDeleteVertexArrays(1, &vao_);
-}
+Sprite::~Sprite(){}
+
 void Sprite::Render() const{
 	shader_program_->Use();
 
@@ -81,7 +75,7 @@ void Sprite::Render() const{
 	model = glm::translate(model, glm::vec3(-0.5f * size_.x, -0.5f * size_.y, 0.f));
 	model = glm::scale(model, glm::vec3(size_, 1.f));
 
-	glBindVertexArray(vao_);
+	vertex_array_.Bind();
 	shader_program_->SetMatrix4("model_matrix", model);
 
 	glActiveTexture(GL_TEXTURE0);
@@ -89,7 +83,7 @@ void Sprite::Render() const{
 
 	//glDrawArrays(GL_TRIANGLES, 0, 6);
 	glDrawElements(GL_TRIANGLES,6,GL_UNSIGNED_INT, nullptr);
-	glBindVertexArray(0);
+	vertex_array_.Unbind();
 
 }
 void Sprite::SetPosition(const glm::vec2& position){

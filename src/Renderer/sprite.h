@@ -2,6 +2,7 @@
 
 #include "vertex_buffer.h"
 #include "index_buffer.h"
+#include "vertex_array.h"
 
 #include <glad/glad.h>
 #include <glm/vec2.hpp>
@@ -38,6 +39,7 @@ class Sprite {
   float rotation_;
   GLuint vao_;
 
+  VertexArray vertex_array_;
   VertexBuffer vertex_coords_buffer_;
   VertexBuffer texuter_coords_buffer_;
   IndexBuffer index_buffer_;

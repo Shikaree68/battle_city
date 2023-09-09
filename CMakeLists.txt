@@ -27,9 +27,13 @@ add_executable(${PROJECT_NAME}
     src/Renderer/animated_sprite.cpp
     src/Renderer/animated_sprite.h
     src/Renderer/vertex_buffer.cpp
-    src/Renderer/vertex_buffer.h
+    src/Renderer/vertex_buffer.h   
     src/Renderer/index_buffer.cpp
     src/Renderer/index_buffer.h
+    src/Renderer/vertex_array.cpp
+    src/Renderer/vertex_array.h
+    src/Renderer/vertex_buffer_layout.cpp
+    src/Renderer/vertex_buffer_layout.h
 
     src/Resources/resource_manager.cpp
     src/Resources/resource_manager.h

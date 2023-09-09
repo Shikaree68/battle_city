@@ -1,10 +1,9 @@
 #pragma once
 
-
 #include <glad/glad.h>
 #include <stdint.h>
 
-namespace Renderer {
+namespace Renderer{
 
 class VertexBuffer{
 public:
@@ -13,8 +12,8 @@ public:
 
 	VertexBuffer(const VertexBuffer&) = delete;
 	VertexBuffer& operator=(const VertexBuffer&) = delete;
-	VertexBuffer& operator=(VertexBuffer&& vertex_buffer);
-	VertexBuffer(VertexBuffer&& vertex_buffer);
+	VertexBuffer& operator=(VertexBuffer&& vertex_buffer) noexcept;
+	VertexBuffer(VertexBuffer&& vertex_buffer) noexcept;
 
 	void Initialize(const void* data, const uint32_t size);
 	void Update(const void* data, const uint32_t size) const;
