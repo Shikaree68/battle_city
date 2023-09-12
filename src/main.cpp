@@ -73,6 +73,9 @@ int main(int argc, char** argv){
 
 		/* Loop until the user closes the window */
 		while(!glfwWindowShouldClose(p_window)){
+			/* Poll for and process events */
+			glfwPollEvents();
+
 			auto current_time = std::chrono::high_resolution_clock::now();
 			uint64_t duration = std::chrono::duration_cast<std::chrono::nanoseconds>(current_time - last_time).count();
 			last_time = current_time;
@@ -85,9 +88,6 @@ int main(int argc, char** argv){
 
 			/* Swap front and back buffers */
 			glfwSwapBuffers(p_window);
-
-			/* Poll for and process events */
-			glfwPollEvents();
 		}
 		ResourceManager::UnloadAllResources();
 	}

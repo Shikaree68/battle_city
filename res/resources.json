@@ -1,0 +1,132 @@
+{
+  "shaders": [
+    {
+      "name": "sprite_shader",
+      "filepath_v": "res/shaders/sprite_v.vert",
+      "filepath_f": "res/shaders/sprite_f.frag"
+    }
+  ],
+
+  "texture_atlases": [
+    {
+      "name": "map_texture_atlas",
+      "filepath": "res/textures/map_16x16.png",
+      "subtexture_width": 16,
+      "subtexture_height": 16,
+      "subtextures": [
+        "block",
+        "top_block",
+        "bottom_block",
+        "left_block",
+        "right_block",
+        "top_left_block",
+        "top_right_block",
+        "bottom_left_block",
+        "bottom_right_block",
+        "beton",
+        "top_beton",
+        "bottom_beton",
+        "left_beton",
+        "right_beton",
+        "top_left_beton",
+        "top_right_beton",
+        "bottom_left_beton",
+        "bottom_right_beton",
+        "water1",
+        "water2",
+        "water3",
+        "trees",
+        "ice",
+        "wall",
+        "eagle",
+        "dead_eagle",
+        "nothing",
+        "respawn1",
+        "respawn2",
+        "respawn3",
+        "respawn4"
+      ]
+    },
+    {
+      "name": "tanks_texture_atlas",
+      "filepath": "res/textures/tanks.png",
+      "subtexture_width": 16,
+      "subtexture_height": 16,
+      "subtextures": [
+        "type1_yellow_top1",
+        "type1_yellow_top2",
+        "type1_yellow_left1",
+        "type1_yellow_left2",
+        "type1_yellow_bottom1",
+        "type1_yellow_bottom2",
+        "type1_yellow_right1",
+        "type1_yellow_right2"
+      ]
+    }
+  ],
+  "animated_sprites": [
+    {
+      "name": "tank_animated_sprite",
+      "texture_atlas": "tanks_texture_atlas",
+      "shader": "sprite_shader",
+      "initial_width": 100,
+      "initial_height": 100,
+      "initial_subtexture": "type1_yellow_top1",
+      "states": [
+        {
+          "state_name": "tank_top_state",
+          "frames": [
+            {
+              "subtexture": "type1_yellow_top1",
+              "duration": 500000000
+            },
+            {
+              "subtexture": "type1_yellow_top2",
+              "duration": 500000000
+            }
+          ]
+        },
+        {
+          "state_name": "tank_left_state",
+          "frames": [
+            {
+              "subtexture": "type1_yellow_left1",
+              "duration": 500000000
+            },
+            {
+              "subtexture": "type1_yellow_left2",
+              "duration": 500000000
+            }
+          ]
+        },
+        {
+          "state_name": "tank_bottom_state",
+          "frames": [
+            {
+              "subtexture": "type1_yellow_bottom1",
+              "duration": 500000000
+            },
+            {
+              "subtexture": "type1_yellow_bottom2",
+              "duration": 500000000
+            }
+          ]
+        },
+        {
+          "state_name": "tank_right_state",
+          "frames": [
+            {
+              "subtexture": "type1_yellow_right1",
+              "duration": 500000000
+            },
+            {
+              "subtexture": "type1_yellow_right2",
+              "duration": 500000000
+            }
+          ]
+        }
+      ]
+    }
+  ]
+
+}

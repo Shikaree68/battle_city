@@ -1,14 +1,15 @@
 #include "resource_manager.h"
-
-#include <fstream>
-#include <iostream>
-#include <sstream>
-
 #include "../Renderer/shader_program.h"
 #include "../Renderer/texture_2D.h"
 #include "../Renderer/sprite.h"
 #include "../Renderer/animated_sprite.h"
 
+#include <fstream>
+#include <iostream>
+#include <sstream>
+
+#include <rapidjson/document.h>
+#include <rapidjson/error/en.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #define STBI_ONLY_PNG
@@ -33,8 +34,8 @@ void ResourceManager::UnloadAllResources(){
 }
 
 std::shared_ptr<RenderEngine::ShaderProgram> ResourceManager::LoadShaders(const std::string& shader_name,
-																	  const std::string& vertex_path,
-																	  const std::string& fragment_path){
+																		  const std::string& vertex_path,
+																		  const std::string& fragment_path){
 	std::string vertex_str = GetFileString(vertex_path);
 	if(vertex_str.empty()){
 		std::cerr << "No vertex shader!" << std::endl;
@@ -98,11 +99,11 @@ std::shared_ptr<RenderEngine::Texture2D>ResourceManager::GetTexture(const std::s
 }
 
 std::shared_ptr<RenderEngine::Sprite> ResourceManager::LoadSprite(const std::string& sprite_name,
-															  const std::string& texture_name,
-															  const std::string& shader_name,
-															  const uint32_t sprite_width,
-															  const uint32_t sprite_height,
-															  const std::string& sub_texture_name){
+																  const std::string& texture_name,
+																  const std::string& shader_name,
+																  const uint32_t sprite_width,
+																  const uint32_t sprite_height,
+																  const std::string& sub_texture_name){
 	auto texture{GetTexture(texture_name)};
 	if(!texture){
 		std::cerr << "Can't find texture: " << texture_name << " for the sprite: " << sprite_name << std::endl;
@@ -128,11 +129,11 @@ std::shared_ptr<RenderEngine::Sprite> ResourceManager::GetSprite(const std::stri
 }
 
 std::shared_ptr<RenderEngine::AnimatedSprite> ResourceManager::LoadAnimatedSprite(const std::string& sprite_name,
-																			  const std::string& texture_name,
-																			  const std::string& shader_name,
-																			  const uint32_t sprite_width,
-																			  const uint32_t sprite_height,
-																			  const std::string& sub_texture_name){
+																				  const std::string& texture_name,
+																				  const std::string& shader_name,
+																				  const uint32_t sprite_width,
+																				  const uint32_t sprite_height,
+																				  const std::string& sub_texture_name){
 	auto texture = GetTexture(texture_name);
 	if(!texture){
 		std::cerr << "Can't find texture: " << texture_name << " for the sprite: " << sprite_name << std::endl;
@@ -157,11 +158,90 @@ std::shared_ptr<RenderEngine::AnimatedSprite> ResourceManager::GetAnimatedSprite
 	return nullptr;
 }
 
+bool ResourceManager::LoadJsonResources(const std::string& json_path){
+	const std::string json_string = GetFileString(json_path);
+	if(json_string.empty()){
+
+		std::cerr << "No JSON resources file!" << std::endl;
+		return false;
+	}
+
+	rapidjson::Document document;
+	rapidjson::ParseResult parse_result = document.Parse(json_string.c_str());
+	if(!parse_result){
+		std::cerr << "JSON parse error: " << rapidjson::GetParseError_En(parse_result.Code())
+			<< '(' << parse_result.Offset() << ')' << std::endl;
+		std::cerr << "In JSON file: " << json_path << std::endl;
+		return false;
+	}
+
+	auto shaders = document.FindMember("shaders");
+	if(shaders != document.MemberEnd()){
+		for(const auto& current_shader : shaders->value.GetArray()){
+			const std::string name = current_shader["name"].GetString();
+			const std::string filepath_v = current_shader["filepath_v"].GetString();
+			const std::string filepath_f = current_shader["filepath_f"].GetString();
+			LoadShaders(name, filepath_v, filepath_f);
+		}
+	}
+
+	auto texture_atlases = document.FindMember("texture_atlases");
+	if(texture_atlases != document.MemberEnd()){
+		for(const auto& current_texture_atlas : texture_atlases->value.GetArray()){
+			const std::string name = current_texture_atlas["name"].GetString();
+			const std::string filepath = current_texture_atlas["filepath"].GetString();
+			const uint32_t subtexture_width = current_texture_atlas["subtexture_width"].GetUint();
+			const uint32_t subtexture_height = current_texture_atlas["subtexture_height"].GetUint();
+			const auto subtextures_array = current_texture_atlas["subtextures"].GetArray();
+
+			std::vector<std::string> subtextures;
+			subtextures.reserve(subtextures_array.Size());
+			for(const auto& current_subtexture : subtextures_array){
+				subtextures.push_back(current_subtexture.GetString());
+			}
+
+			LoadTextureAtlas(name, filepath, subtextures, subtexture_width, subtexture_height);
+		}
+	}
+	auto animated_sprites = document.FindMember("animated_sprites");
+	if(animated_sprites != document.MemberEnd()){
+		for(const auto& current_animated_sprite : animated_sprites->value.GetArray()){
+			const std::string name = current_animated_sprite["name"].GetString();
+			const std::string texture_atlas = current_animated_sprite["texture_atlas"].GetString();
+			const std::string shader = current_animated_sprite["shader"].GetString();
+			const uint32_t initial_width = current_animated_sprite["initial_width"].GetUint();
+			const uint32_t initial_height = current_animated_sprite["initial_height"].GetUint();
+			const std::string initial_subtexture = current_animated_sprite["initial_subtexture"].GetString();
+
+			auto animated_sprite = LoadAnimatedSprite(name, texture_atlas, shader, initial_width, 
+													  initial_height, initial_subtexture);
+			if(!animated_sprite){
+				continue;
+			}
+
+			const auto states_array = current_animated_sprite["states"].GetArray();
+			for(const auto& current_state : states_array){
+				const std::string state_name = current_state["state_name"].GetString();
+				std::vector<std::pair<std::string, uint64_t>> frames;
+				const auto frames_array = current_state["frames"].GetArray();
+				frames.reserve(frames_array.Size());
+				for(const auto& current_frame : frames_array){
+					const std::string subtexture = current_frame["subtexture"].GetString();
+					const uint64_t duration = current_frame["duration"].GetUint64();
+					frames.emplace_back(std::make_pair<>(subtexture, duration));
+				}
+				animated_sprite->InsertState(state_name, frames);
+			}
+		}
+	}
+	return true;
+}
+
 std::shared_ptr<RenderEngine::Texture2D> ResourceManager::LoadTextureAtlas(const std::string& texture_name,
-																	   const std::string& texture_path,
-																	   const std::vector<std::string>& sub_textures_names,
-																	   const uint32_t sub_texture_width,
-																	   const uint32_t sub_texture_height){
+																		   const std::string& texture_path,
+																		   const std::vector<std::string>& sub_textures_names,
+																		   const uint32_t sub_texture_width,
+																		   const uint32_t sub_texture_height){
 	std::shared_ptr<RenderEngine::Texture2D> texture{LoadTexture(texture_name, texture_path)};
 	if(texture){
 		const uint32_t texture_width = texture->GetSize().width;
@@ -188,7 +268,7 @@ std::shared_ptr<RenderEngine::Texture2D> ResourceManager::LoadTextureAtlas(const
 	return texture;
 }
 
-std::string ResourceManager::GetFileString(const std::string& relative_path) {
+std::string ResourceManager::GetFileString(const std::string& relative_path){
 	std::ifstream ifs;
 	ifs.open(path_ + '/' + relative_path.c_str(), std::ios::in | std::ios::binary);
 	if(!ifs.is_open()){

@@ -52,6 +52,8 @@ public:
 																		const std::string& sub_texture_name = "default");
 	static std::shared_ptr<RenderEngine::AnimatedSprite> GetAnimatedSprite(const std::string& sprite_name);
 
+	static bool LoadJsonResources(const std::string& json_path);
+
 private:
 	typedef std::map<const std::string, std::shared_ptr<RenderEngine::ShaderProgram>> ShaderProgramsMap;
 	typedef std::map<const std::string, std::shared_ptr<RenderEngine::Texture2D>> TexturesMap;

@@ -47,6 +47,7 @@ add_executable(${PROJECT_NAME}
     src/Game/tank.h
     res/shaders/vertex.vert
     res/shaders/fragment.frag
+    res/resources.json
 )
 
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
@@ -61,6 +62,8 @@ add_subdirectory(external/glad)
 target_link_libraries(${PROJECT_NAME} glad)
 
 include_directories(external/glm)
+
+include_directories(external/rapidjson/include)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/)
 
