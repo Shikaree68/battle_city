@@ -20,6 +20,7 @@ ResourceManager::TexturesMap ResourceManager::textures_;
 ResourceManager::SpritesMap ResourceManager::sprites_;
 ResourceManager::AnimatedSpritesMap ResourceManager::animated_sprites_;
 std::string ResourceManager::path_;
+std::vector<std::vector<std::string>> ResourceManager::levels_;
 
 void ResourceManager::SetExecutablePath(const std::string& executable_path){
 	size_t found = executable_path.find_last_of("/\\");
@@ -101,8 +102,6 @@ std::shared_ptr<RenderEngine::Texture2D>ResourceManager::GetTexture(const std::s
 std::shared_ptr<RenderEngine::Sprite> ResourceManager::LoadSprite(const std::string& sprite_name,
 																  const std::string& texture_name,
 																  const std::string& shader_name,
-																  const uint32_t sprite_width,
-																  const uint32_t sprite_height,
 																  const std::string& sub_texture_name){
 	auto texture{GetTexture(texture_name)};
 	if(!texture){
@@ -114,7 +113,7 @@ std::shared_ptr<RenderEngine::Sprite> ResourceManager::LoadSprite(const std::str
 		std::cerr << "Can't find shader: " << shader_name << " for the sprite: " << sprite_name << std::endl;
 	}
 	std::shared_ptr<RenderEngine::Sprite> new_sprite = sprites_.emplace(sprite_name, std::make_shared<RenderEngine::Sprite>(
-		texture, sub_texture_name, shader, glm::vec2(0.f, 0.f), glm::vec2(sprite_width, sprite_height))).first->second;
+		texture, sub_texture_name, shader)).first->second;
 
 	return new_sprite;
 }
@@ -131,8 +130,6 @@ std::shared_ptr<RenderEngine::Sprite> ResourceManager::GetSprite(const std::stri
 std::shared_ptr<RenderEngine::AnimatedSprite> ResourceManager::LoadAnimatedSprite(const std::string& sprite_name,
 																				  const std::string& texture_name,
 																				  const std::string& shader_name,
-																				  const uint32_t sprite_width,
-																				  const uint32_t sprite_height,
 																				  const std::string& sub_texture_name){
 	auto texture = GetTexture(texture_name);
 	if(!texture){
@@ -143,8 +140,9 @@ std::shared_ptr<RenderEngine::AnimatedSprite> ResourceManager::LoadAnimatedSprit
 	if(!shader){
 		std::cerr << "Can't find shader: " << shader_name << " for the sprite: " << sprite_name << std::endl;
 	}
-	std::shared_ptr<RenderEngine::AnimatedSprite> new_sprite = animated_sprites_.emplace(sprite_name, std::make_shared<RenderEngine::AnimatedSprite>(
-		texture, sub_texture_name, shader, glm::vec2(0.f, 0.f), glm::vec2(sprite_width, sprite_height))).first->second;
+	std::shared_ptr<RenderEngine::AnimatedSprite> new_sprite = animated_sprites_.emplace(
+		sprite_name, std::make_shared<RenderEngine::AnimatedSprite>(texture, sub_texture_name, shader)
+	).first->second;
 
 	return new_sprite;
 }
@@ -203,18 +201,31 @@ bool ResourceManager::LoadJsonResources(const std::string& json_path){
 			LoadTextureAtlas(name, filepath, subtextures, subtexture_width, subtexture_height);
 		}
 	}
+
+	auto sprites = document.FindMember("sprites");
+	if(sprites != document.MemberEnd()){
+		for(const auto& current_sprite : sprites->value.GetArray()){
+			const std::string name = current_sprite["name"].GetString();
+			const std::string texture_atlas = current_sprite["texture_atlas"].GetString();
+			const std::string shader = current_sprite["shader"].GetString();
+			const std::string subtexture = current_sprite["sub_texture_name"].GetString();
+
+			auto sprite = LoadSprite(name, texture_atlas, shader, subtexture);
+			if(!sprite){
+				continue;
+			}			
+		}
+	}
+
 	auto animated_sprites = document.FindMember("animated_sprites");
 	if(animated_sprites != document.MemberEnd()){
 		for(const auto& current_animated_sprite : animated_sprites->value.GetArray()){
 			const std::string name = current_animated_sprite["name"].GetString();
 			const std::string texture_atlas = current_animated_sprite["texture_atlas"].GetString();
 			const std::string shader = current_animated_sprite["shader"].GetString();
-			const uint32_t initial_width = current_animated_sprite["initial_width"].GetUint();
-			const uint32_t initial_height = current_animated_sprite["initial_height"].GetUint();
 			const std::string initial_subtexture = current_animated_sprite["initial_subtexture"].GetString();
 
-			auto animated_sprite = LoadAnimatedSprite(name, texture_atlas, shader, initial_width, 
-													  initial_height, initial_subtexture);
+			auto animated_sprite = LoadAnimatedSprite(name, texture_atlas, shader, initial_subtexture);
 			if(!animated_sprite){
 				continue;
 			}
@@ -234,7 +245,33 @@ bool ResourceManager::LoadJsonResources(const std::string& json_path){
 			}
 		}
 	}
+
+	auto levels = document.FindMember("levels");
+	if(levels != document.MemberEnd()){
+		for(const auto& current_level : levels->value.GetArray()){
+			const auto description = current_level["description"].GetArray();
+			std::vector<std::string> level_rows;
+			level_rows.reserve(description.Size());
+			size_t max_length = 0;
+			for(const auto& level_row : description){
+				level_rows.emplace_back(level_row.GetString());
+				if(max_length < level_rows.back().length()){
+					max_length = level_rows.back().length();
+				}
+			}
+			for(auto& current_row : level_rows){
+				while(current_row.length() < max_length){
+					current_row.append("D");
+				}
+			}
+			levels_.emplace_back(level_rows);
+		}
+	}
 	return true;
+}
+
+const std::vector<std::vector<std::string>>& ResourceManager::GetLevels(){
+	return levels_;
 }
 
 std::shared_ptr<RenderEngine::Texture2D> ResourceManager::LoadTextureAtlas(const std::string& texture_name,

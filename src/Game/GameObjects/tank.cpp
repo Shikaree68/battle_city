@@ -1,19 +1,18 @@
 #include "tank.h"
-#include "../Renderer/animated_sprite.h"
+#include "../../Renderer/animated_sprite.h"
 
 
-Tank::Tank(std::shared_ptr<RenderEngine::AnimatedSprite> sprite, const float velocity, const glm::vec2& position)
-	: orientation_(Orientation::Top)
+Tank::Tank(std::shared_ptr<RenderEngine::AnimatedSprite> sprite, const float velocity, const glm::vec2& position, const glm::vec2& size)
+	: GameObject(position, size, 0.f)
+	, orientation_(Orientation::Top)
 	, sprite_(sprite)
 	, is_move_(false)
 	, velocity_(velocity)
-	, position_(position)
 	, move_offset_(glm::vec2(0.f, 1.f)){
-	sprite_->SetPosition(position_);
 }
 
 void Tank::Render() const{
-	sprite_->Render();;
+	sprite_->Render(position_, size_, rotation_);
 }
 
 void Tank::SetOrientation(const Orientation orientation){
@@ -55,7 +54,6 @@ void Tank::Move(bool is_move){
 void Tank::Update(const uint64_t delta){
 	if(is_move_){
 		position_ += delta * velocity_ * move_offset_;
-		sprite_->SetPosition(position_);
 		sprite_->Update(delta);
 	}
 }

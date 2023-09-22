@@ -10,15 +10,9 @@
 namespace RenderEngine{
 Sprite::Sprite(std::shared_ptr<Texture2D> texture,
 			   const std::string& initial_sub_texture,
-			   std::shared_ptr<ShaderProgram> shader_program,
-			   const glm::vec2& position,
-			   const glm::vec2& size,
-			   const float rotation)
+			   std::shared_ptr<ShaderProgram> shader_program)
 	: texture_(std::move(texture))
-	, shader_program_(std::move(shader_program))
-	, position_(position)
-	, size_(size)
-	, rotation_(rotation){
+	, shader_program_(std::move(shader_program)){
 
 	const GLfloat vertex_coords[]{
 		//1--2
@@ -65,16 +59,16 @@ Sprite::Sprite(std::shared_ptr<Texture2D> texture,
 }
 Sprite::~Sprite(){}
 
-void Sprite::Render() const{
+void Sprite::Render(const glm::vec2& position, const glm::vec2& size, const float rotation) const{
 	shader_program_->Use();
 
 	glm::mat4 model(1.f);
 
-	model = glm::translate(model, glm::vec3(position_, 0.f));
-	model = glm::translate(model, glm::vec3(0.5f * size_.x, 0.5f * size_.y, 0.f));
-	model = glm::rotate(model, glm::radians(rotation_), glm::vec3(0.f, 0.f, 1.f));
-	model = glm::translate(model, glm::vec3(-0.5f * size_.x, -0.5f * size_.y, 0.f));
-	model = glm::scale(model, glm::vec3(size_, 1.f));
+	model = glm::translate(model, glm::vec3(position, 0.f));
+	model = glm::translate(model, glm::vec3(0.5f * size.x, 0.5f * size.y, 0.f));
+	model = glm::rotate(model, glm::radians(rotation), glm::vec3(0.f, 0.f, 1.f));
+	model = glm::translate(model, glm::vec3(-0.5f * size.x, -0.5f * size.y, 0.f));
+	model = glm::scale(model, glm::vec3(size, 1.f));
 
 	shader_program_->SetMatrix4("model_matrix", model);
 
@@ -83,14 +77,5 @@ void Sprite::Render() const{
 
 
 	Renderer::Draw(vertex_array_, index_buffer_, *shader_program_);
-}
-void Sprite::SetPosition(const glm::vec2& position){
-	position_ = position;
-}
-void Sprite::SetSize(const glm::vec2& size){
-	size_ = size;
-}
-void Sprite::SetRotation(const float rotation){
-	rotation_ = rotation;
 }
 }

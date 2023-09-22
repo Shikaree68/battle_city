@@ -18,7 +18,7 @@ public:
 	VertexBufferLayout();
 
 	void ReserveElements(const size_t count);
-	uint32_t GetStride() const{
+	uint64_t GetStride() const{
 		return stride_;
 	}
 	void AddElementLayoutFloat(const int32_t count, const bool normilozed);
@@ -27,6 +27,6 @@ public:
 	}
 private:
 	std::vector<VertexBufferLayoutElement> layout_elements_;
-	uint32_t stride_;
+	uint64_t stride_;
 };
 }  // namespace Renderer

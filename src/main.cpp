@@ -16,8 +16,8 @@ int GLFW_VER_MAJOR = 4;
 int GLFW_VER_MINOR = 6;
 }  // namespace INFO
 
-glm::ivec2 WINDOW_SIZE(640, 480);
-Game game(WINDOW_SIZE);
+glm::ivec2 WINDOW_SIZE(13 * 16, 14 * 16);
+std::unique_ptr<Game> game(std::make_unique<Game>(WINDOW_SIZE));
 
 
 void glfwWindowSizeCallback(GLFWwindow* window, int width, int height){
@@ -31,7 +31,7 @@ void glfwKeyCallback(GLFWwindow* p_window, int key, int scancode, int action,
 	if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS){
 		glfwSetWindowShouldClose(p_window, GL_TRUE);
 	}
-	game.SetKey(key, action);
+	game->SetKey(key, action);
 }
 
 int main(int argc, char** argv){
@@ -68,7 +68,7 @@ int main(int argc, char** argv){
 	RenderEngine::Renderer::SetClearColor(0, 0, 0, 1);
 	{
 		ResourceManager::SetExecutablePath(argv[0]);		
-		game.Initialize();
+		game->Initialize();
 		auto last_time = std::chrono::high_resolution_clock::now();
 
 		/* Loop until the user closes the window */
@@ -79,16 +79,17 @@ int main(int argc, char** argv){
 			auto current_time = std::chrono::high_resolution_clock::now();
 			uint64_t duration = std::chrono::duration_cast<std::chrono::nanoseconds>(current_time - last_time).count();
 			last_time = current_time;
-			game.Update(duration);
+			game->Update(duration);
 
 			/* Render here */
 			RenderEngine::Renderer::Clear();
 
-			game.Render();
+			game->Render();
 
 			/* Swap front and back buffers */
 			glfwSwapBuffers(p_window);
 		}
+		game.reset();
 		ResourceManager::UnloadAllResources();
 	}
 	glfwTerminate();

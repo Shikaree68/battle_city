@@ -5,18 +5,14 @@
 namespace RenderEngine{
 AnimatedSprite::AnimatedSprite(std::shared_ptr<Texture2D> texture,
 							   const std::string& initial_sub_texture,
-							   std::shared_ptr<ShaderProgram> shader_program,
-							   const glm::vec2& position,
-							   const glm::vec2& size,
-							   const float rotation)
-	: Sprite(std::move(texture), initial_sub_texture,
-			 std::move(shader_program), position, size, rotation){
+							   std::shared_ptr<ShaderProgram> shader_program)
+	: Sprite(texture, initial_sub_texture,shader_program){
 	current_animation_durations_ = states_.end();
 }
 void AnimatedSprite::InsertState(const std::string& state, const std::vector<std::pair<std::string, uint64_t>>& sub_textures_duration){
 	states_.emplace(state, sub_textures_duration);
 }
-void AnimatedSprite::Render() const{
+void AnimatedSprite::Render(const glm::vec2& position, const glm::vec2& size, const float rotation) const {
 	if(dirty_state_){
 		auto& sub_texture{texture_->GetSubTexture(current_animation_durations_->second[current_frame_].first)};
 
@@ -30,7 +26,7 @@ void AnimatedSprite::Render() const{
 		texuter_coords_buffer_.Update(texture_coords, 2 * 4 * sizeof(GLfloat));
 		dirty_state_ = false;
 	}
-	Sprite::Render();
+	Sprite::Render(position, size, rotation);
 }
 void AnimatedSprite::SetState(const std::string& new_state){
 	auto state{states_.find(new_state)};

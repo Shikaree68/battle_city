@@ -1,11 +1,12 @@
 #include "game.h"
-#include "tank.h"
+#include "./GameObjects/tank.h"
 
 #include "../Renderer/shader_program.h"
 #include "../Resources/resource_manager.h"
 #include "../Renderer/texture_2D.h"
 #include "../Renderer/sprite.h"
 #include "../Renderer/animated_sprite.h"
+#include "level.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/mat4x4.hpp>
@@ -23,6 +24,9 @@ Game::~Game(){}
 
 void Game::Render(){
 	//ResourceManager::GetAnimatedSprite("NewAnimatedSprite")->Render();
+	if(level_){
+		level_->Render();
+	}
 	if(tank_){
 		tank_->Render();
 	}
@@ -30,6 +34,9 @@ void Game::Render(){
 
 void Game::Update(const uint64_t delta){
 	//ResourceManager::GetAnimatedSprite("NewAnimatedSprite")->Update(delta);
+	if(level_){
+		level_->Update(delta);
+	}
 	if(tank_){
 		if(keys_[GLFW_KEY_W]){
 			tank_->SetOrientation(Tank::Orientation::Top);
@@ -78,9 +85,7 @@ bool Game::Initialize(){
 	auto animated_sprite = ResourceManager::LoadAnimatedSprite("NewAnimatedSprite",
 															   "tanks_texture_atlas",
 															   "sprite_shader",
-															   100, 100,
 															   "block");
-	animated_sprite->SetPosition(glm::vec2(300, 300));
 
 	std::vector<std::pair<std::string, uint64_t>> water_state;
 	water_state.emplace_back(std::make_pair<std::string, uint64_t>("water1", 1'000'000'000));
@@ -110,6 +115,8 @@ bool Game::Initialize(){
 		std::cerr << "Can't find texture atlas: " << "tanks_texture_atlas" << std::endl;
 		return false;
 	}
-	tank_ = std::make_unique<Tank>(tank_animated_sprite, 0.0000001f, glm::vec2(100.f, 100.f));
+	tank_ = std::make_unique<Tank>(tank_animated_sprite, 0.0000001f, glm::vec2(0), glm::vec2(16.f, 16.f));
+
+	level_ = std::make_unique<Level>(ResourceManager::GetLevels()[0]);
 	return true;
 }

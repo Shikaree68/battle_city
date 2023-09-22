@@ -43,8 +43,15 @@ add_executable(${PROJECT_NAME}
 
     src/Game/game.cpp
     src/Game/game.h
-    src/Game/tank.cpp
-    src/Game/tank.h
+    src/Game/level.cpp
+    src/Game/level.h
+    src/Game/GameObjects/game_object_interface.cpp
+    src/Game/GameObjects/game_object_interface.h
+    src/Game/GameObjects/tank.cpp
+    src/Game/GameObjects/tank.h   
+    src/Game/GameObjects/brick_wall.cpp
+    src/Game/GameObjects/brick_wall.h
+
     res/shaders/vertex.vert
     res/shaders/fragment.frag
     res/resources.json
