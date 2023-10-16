@@ -23,9 +23,9 @@ add_executable(${PROJECT_NAME}
     src/Renderer/texture_2D.cpp
     src/Renderer/texture_2D.h
     src/Renderer/sprite.cpp
-    src/Renderer/sprite.h
-    src/Renderer/animated_sprite.cpp
-    src/Renderer/animated_sprite.h
+    src/Renderer/sprite.h 
+    src/Renderer/sprite_animator.cpp
+    src/Renderer/sprite_animator.h
     src/Renderer/vertex_buffer.cpp
     src/Renderer/vertex_buffer.h   
     src/Renderer/index_buffer.cpp

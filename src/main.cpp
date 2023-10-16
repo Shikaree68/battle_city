@@ -23,7 +23,22 @@ std::unique_ptr<Game> game(std::make_unique<Game>(WINDOW_SIZE));
 void glfwWindowSizeCallback(GLFWwindow* window, int width, int height){
 	WINDOW_SIZE.x = width;
 	WINDOW_SIZE.y = height;
-	RenderEngine::Renderer::SetViewport(WINDOW_SIZE.x, WINDOW_SIZE.y);
+
+	const float map_aspect_ratio = 13.f / 14.f;
+	uint32_t view_port_width = WINDOW_SIZE.x;
+	uint32_t view_port_height = WINDOW_SIZE.y;
+	uint32_t view_port_left_offset = 0;
+	uint32_t view_port_bottom_offset = 0;
+
+	if(WINDOW_SIZE.x * 1.f/ WINDOW_SIZE.y > map_aspect_ratio){
+		view_port_width = static_cast<uint32_t>(WINDOW_SIZE.y * map_aspect_ratio);
+		view_port_left_offset = (WINDOW_SIZE.x - view_port_width) / 2;
+	} else{
+		view_port_height = static_cast<uint32_t>(WINDOW_SIZE.x / map_aspect_ratio);
+		view_port_bottom_offset = (WINDOW_SIZE.y - view_port_height) / 2;
+	}
+
+	RenderEngine::Renderer::SetViewport(view_port_width, view_port_height, view_port_left_offset, view_port_bottom_offset);
 }
 
 void glfwKeyCallback(GLFWwindow* p_window, int key, int scancode, int action,
@@ -77,7 +92,7 @@ int main(int argc, char** argv){
 			glfwPollEvents();
 
 			auto current_time = std::chrono::high_resolution_clock::now();
-			uint64_t duration = std::chrono::duration_cast<std::chrono::nanoseconds>(current_time - last_time).count();
+			uint32_t duration = static_cast<uint32_t>(std::chrono::duration_cast<std::chrono::nanoseconds>(current_time - last_time).count());
 			last_time = current_time;
 			game->Update(duration);
 

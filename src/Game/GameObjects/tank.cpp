@@ -1,18 +1,43 @@
 #include "tank.h"
-#include "../../Renderer/animated_sprite.h"
+#include "../../Renderer/sprite.h"
 
 
-Tank::Tank(std::shared_ptr<RenderEngine::AnimatedSprite> sprite, const float velocity, const glm::vec2& position, const glm::vec2& size)
+Tank::Tank(std::shared_ptr<RenderEngine::Sprite> sprite_top,
+		   std::shared_ptr<RenderEngine::Sprite> sprite_bottom,
+		   std::shared_ptr<RenderEngine::Sprite> sprite_left,
+		   std::shared_ptr<RenderEngine::Sprite> sprite_right,
+		   const float velocity,
+		   const glm::vec2& position,
+		   const glm::vec2& size)
 	: GameObject(position, size, 0.f)
 	, orientation_(Orientation::Top)
-	, sprite_(sprite)
+	, sprite_top_(sprite_top)
+	, sprite_bottom_(sprite_bottom)
+	, sprite_left_(sprite_left)
+	, sprite_right_(sprite_right)
+	, sprite_animator_top_(sprite_top_)
+	, sprite_animator_bottom_(sprite_bottom_)
+	, sprite_animator_left_(sprite_left_)
+	, sprite_animator_right_(sprite_right_)
 	, is_move_(false)
 	, velocity_(velocity)
-	, move_offset_(glm::vec2(0.f, 1.f)){
-}
+	, move_offset_(glm::vec2(0.f, 1.f)){}
 
 void Tank::Render() const{
-	sprite_->Render(position_, size_, rotation_);
+	switch(orientation_){
+	case Tank::Orientation::Top:
+		sprite_top_->Render(position_, size_, rotation_, sprite_animator_top_.GetCurrentFrame());
+		break;
+	case Tank::Orientation::Bottom:
+		sprite_bottom_->Render(position_, size_, rotation_, sprite_animator_bottom_.GetCurrentFrame());
+		break;
+	case Tank::Orientation::Left:
+		sprite_left_->Render(position_, size_, rotation_, sprite_animator_left_.GetCurrentFrame());
+		break;
+	case Tank::Orientation::Right:
+		sprite_right_->Render(position_, size_, rotation_, sprite_animator_right_.GetCurrentFrame());
+		break;
+	}
 }
 
 void Tank::SetOrientation(const Orientation orientation){
@@ -23,22 +48,18 @@ void Tank::SetOrientation(const Orientation orientation){
 	orientation_ = orientation;
 	switch(orientation_){
 	case Tank::Orientation::Top:
-		sprite_->SetState("tank_top_state");
 		move_offset_.x = 0.f;
 		move_offset_.y = 1.f;
 		break;
 	case Tank::Orientation::Bottom:
-		sprite_->SetState("tank_bottom_state");
 		move_offset_.x = 0.f;
 		move_offset_.y = -1.f;
 		break;
 	case Tank::Orientation::Left:
-		sprite_->SetState("tank_left_state");
 		move_offset_.x = -1.f;
 		move_offset_.y = 0.f;
 		break;
 	case Tank::Orientation::Right:
-		sprite_->SetState("tank_right_state");
 		move_offset_.x = 1.f;
 		move_offset_.y = 0.f;
 		break;
@@ -51,10 +72,23 @@ void Tank::Move(bool is_move){
 	is_move_ = is_move;
 }
 
-void Tank::Update(const uint64_t delta){
+void Tank::Update(const uint32_t delta){
 	if(is_move_){
 		position_ += delta * velocity_ * move_offset_;
-		sprite_->Update(delta);
+		switch(orientation_){
+		case Tank::Orientation::Top:
+			sprite_animator_top_.Update(delta);
+			break;
+		case Tank::Orientation::Bottom:
+			sprite_animator_bottom_.Update(delta);
+			break;
+		case Tank::Orientation::Left:
+			sprite_animator_left_.Update(delta);
+			break;
+		case Tank::Orientation::Right:
+			sprite_animator_right_.Update(delta);
+			break;
+		}
 	}
 }
 

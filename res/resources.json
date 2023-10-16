@@ -69,121 +69,124 @@
       "name": "brick_wall",
       "texture_atlas": "map_texture_atlas",
       "shader": "sprite_shader",
-      "sub_texture_name": "brick_wall"
+      "initial_subtexture": "brick_wall"
     },
     {
       "name": "brick_wall_top",
       "texture_atlas": "map_texture_atlas",
       "shader": "sprite_shader",
-      "sub_texture_name": "brick_wall_top"
+      "initial_subtexture": "brick_wall_top"
     },
     {
       "name": "brick_wall_bottom",
       "texture_atlas": "map_texture_atlas",
       "shader": "sprite_shader",
-      "sub_texture_name": "brick_wall_bottom"
+      "initial_subtexture": "brick_wall_bottom"
     },
     {
       "name": "brick_wall_left",
       "texture_atlas": "map_texture_atlas",
       "shader": "sprite_shader",
-      "sub_texture_name": "brick_wall_left"
+      "initial_subtexture": "brick_wall_left"
     },
     {
       "name": "brick_wall_right",
       "texture_atlas": "map_texture_atlas",
       "shader": "sprite_shader",
-      "sub_texture_name": "brick_wall_right"
+      "initial_subtexture": "brick_wall_right"
     },
     {
       "name": "brick_wall_top_left",
       "texture_atlas": "map_texture_atlas",
       "shader": "sprite_shader",
-      "sub_texture_name": "brick_wall_top_left"
+      "initial_subtexture": "brick_wall_top_left"
     },
     {
       "name": "brick_wall_top_right",
       "texture_atlas": "map_texture_atlas",
       "shader": "sprite_shader",
-      "sub_texture_name": "brick_wall_top_right"
+      "initial_subtexture": "brick_wall_top_right"
     },
     {
       "name": "brick_wall_bottom_left",
       "texture_atlas": "map_texture_atlas",
       "shader": "sprite_shader",
-      "sub_texture_name": "brick_wall_bottom_left"
+      "initial_subtexture": "brick_wall_bottom_left"
     },
     {
       "name": "brick_wall_bottom_right",
       "texture_atlas": "map_texture_atlas",
       "shader": "sprite_shader",
-      "sub_texture_name": "brick_wall_bottom_right"
+      "initial_subtexture": "brick_wall_bottom_right"
     },
     {
       "name": "nothing",
       "texture_atlas": "map_texture_atlas",
       "shader": "sprite_shader",
-      "sub_texture_name": "beton"
-    }
-  ],
-  "animated_sprites": [
+      "initial_subtexture": "beton"
+    },
     {
-      "name": "tank_animated_sprite",
+      "name": "tank_top_state",
       "texture_atlas": "tanks_texture_atlas",
       "shader": "sprite_shader",
       "initial_subtexture": "type1_yellow_top1",
-      "states": [
+      "frames": [
         {
-          "state_name": "tank_top_state",
-          "frames": [
-            {
-              "subtexture": "type1_yellow_top1",
-              "duration": 500000000
-            },
-            {
-              "subtexture": "type1_yellow_top2",
-              "duration": 500000000
-            }
-          ]
+          "subtexture": "type1_yellow_top1",
+          "duration": 500000000
         },
         {
-          "state_name": "tank_left_state",
-          "frames": [
-            {
-              "subtexture": "type1_yellow_left1",
-              "duration": 500000000
-            },
-            {
-              "subtexture": "type1_yellow_left2",
-              "duration": 500000000
-            }
-          ]
+          "subtexture": "type1_yellow_top2",
+          "duration": 500000000
+        }
+      ]
+    },
+    {
+      "name": "tank_bottom_state",
+      "texture_atlas": "tanks_texture_atlas",
+      "shader": "sprite_shader",
+      "initial_subtexture": "type1_yellow_bottom1",
+      "frames": [
+        {
+          "subtexture": "type1_yellow_bottom1",
+          "duration": 500000000
         },
         {
-          "state_name": "tank_bottom_state",
-          "frames": [
-            {
-              "subtexture": "type1_yellow_bottom1",
-              "duration": 500000000
-            },
-            {
-              "subtexture": "type1_yellow_bottom2",
-              "duration": 500000000
-            }
-          ]
+          "subtexture": "type1_yellow_bottom2",
+          "duration": 500000000
+        }
+      ]
+    },
+
+    {
+      "name": "tank_left_state",
+      "texture_atlas": "tanks_texture_atlas",
+      "shader": "sprite_shader",
+      "initial_subtexture": "type1_yellow_left1",
+      "frames": [
+        {
+          "subtexture": "type1_yellow_left1",
+          "duration": 500000000
         },
         {
-          "state_name": "tank_right_state",
-          "frames": [
-            {
-              "subtexture": "type1_yellow_right1",
-              "duration": 500000000
-            },
-            {
-              "subtexture": "type1_yellow_right2",
-              "duration": 500000000
-            }
-          ]
+          "subtexture": "type1_yellow_left2",
+          "duration": 500000000
+        }
+      ]
+    },
+    {
+      "name": "tank_right_state",
+      "texture_atlas": "tanks_texture_atlas",
+      "shader": "sprite_shader",
+      "initial_subtexture": "type1_yellow_right1",
+      "frames": [
+        {
+          "subtexture": "type1_yellow_right1",
+          "duration": 500000000
+        },
+        {
+          "subtexture": "type1_yellow_right2",
+          "duration": 500000000
         }
       ]
     }

@@ -11,7 +11,7 @@ public:
 	BrickWall(const std::shared_ptr<RenderEngine::Sprite> sprite,
 			  const glm::vec2& position, const glm::vec2& size, const float rotation);
 	void Render() const override;
-	void Update(const uint64_t delta) override;
+	void Update(const uint32_t delta) override;
 private:
 	std::shared_ptr<RenderEngine::Sprite> sprite_;
 };

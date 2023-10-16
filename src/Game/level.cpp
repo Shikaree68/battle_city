@@ -52,7 +52,8 @@ std::shared_ptr<GameObject> create_gameobject(const char description,
 	case 'J':
 		return std::make_shared<BrickWall>(ResourceManager::GetSprite("brick_wall"), position, size, rotation);
 	default:
-		std::cerr << "Unknown GameObject description: " << description << std::endl;;
+		std::cerr << "Unknown GameObject description: " << description << std::endl;
+		return nullptr;
 	}
 }
 
@@ -60,8 +61,8 @@ Level::Level(const std::vector<std::string>& level_description){
 	if(level_description.empty()){
 		std::cerr << "Empty level description!" << std::endl;
 	}
-	width_ = level_description[0].length();
-	height_ = level_description.size();
+	width_ = static_cast<uint32_t>(level_description[0].length());
+	height_ = static_cast<uint32_t>(level_description.size());
 
 	map_objects_.reserve(width_ * height_);
 	uint32_t current_bottom_offset = BLOCK_SIZE * (height_ - 1);
@@ -86,7 +87,7 @@ void Level::Render() const{
 	}
 }
 
-void Level::Update(const uint64_t delta){
+void Level::Update(const uint32_t delta){
 	for(const auto& current_map_obj : map_objects_){
 		if(current_map_obj){
 			current_map_obj->Update(delta);

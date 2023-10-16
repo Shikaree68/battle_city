@@ -23,14 +23,19 @@ void VertexArray::AddBuffer(const VertexBuffer& vertex_buffer, const VertexBuffe
 	vertex_buffer.Bind();
 	const auto& layout_elements = layout.GetLayoutElements();
 	GLbyte* offset = nullptr;
-	for(size_t i = 0, size = layout_elements.size(); i < size; ++i){
+	for(uint32_t i = 0, size = static_cast<uint32_t>(layout_elements.size()); i < size; ++i){
 		const auto& current_layout_element = layout_elements[i];
-		GLuint64 current_attrib_index = elements_count_ + i;
+		GLuint current_attrib_index = elements_count_ + i;
 		glEnableVertexAttribArray(current_attrib_index);
-		glVertexAttribPointer(current_attrib_index, current_layout_element.count, current_layout_element.type, current_layout_element.normalized, layout.GetStride(), offset);
+		glVertexAttribPointer(current_attrib_index, 
+							  current_layout_element.count, 
+							  current_layout_element.type, 
+							  current_layout_element.normalized, 
+							  layout.GetStride(), 
+							  offset);
 		offset += current_layout_element.size;
 	}
-	elements_count_ += layout_elements.size();
+	elements_count_ += static_cast<uint32_t>(layout_elements.size());
 }
 
 void VertexArray::Bind() const{

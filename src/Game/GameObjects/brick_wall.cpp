@@ -15,4 +15,4 @@ void BrickWall::Render() const{
 	sprite_->Render(position_,size_,rotation_);
 }
 
-void BrickWall::Update(const uint64_t delta){}
+void BrickWall::Update(const uint32_t delta){}

@@ -8,7 +8,7 @@ public:
 	virtual ~GameObject();
 
 	virtual void Render() const = 0;
-	virtual void Update(const uint64_t delta) = 0;
+	virtual void Update(const uint32_t delta) = 0;
 
 protected:
 	glm::vec2 position_;

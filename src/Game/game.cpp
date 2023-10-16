@@ -5,7 +5,6 @@
 #include "../Resources/resource_manager.h"
 #include "../Renderer/texture_2D.h"
 #include "../Renderer/sprite.h"
-#include "../Renderer/animated_sprite.h"
 #include "level.h"
 
 #include <glm/gtc/matrix_transform.hpp>
@@ -13,6 +12,8 @@
 #include <GLFW/glfw3.h>
 #include <string>
 #include <iostream>
+
+using namespace std::literals;
 
 Game::Game(const glm::ivec2& window_size)
 	: current_state_(GameState::Active)
@@ -32,7 +33,7 @@ void Game::Render(){
 	}
 }
 
-void Game::Update(const uint64_t delta){
+void Game::Update(const uint32_t delta){
 	//ResourceManager::GetAnimatedSprite("NewAnimatedSprite")->Update(delta);
 	if(level_){
 		level_->Update(delta);
@@ -62,60 +63,38 @@ void Game::SetKey(const int key, int action){
 }
 
 bool Game::Initialize(){
-	ResourceManager::LoadJsonResources("res/resources.json");
-	auto sprite_shader_program = ResourceManager::GetShaderProgram("sprite_shader");
+	ResourceManager::LoadJsonResources("res/resources.json"s);
+	auto sprite_shader_program = ResourceManager::GetShaderProgram("sprite_shader"s);
 	if(!sprite_shader_program){
-		std::cerr << "Can't find shader porgram: " << "sprite_shader" << std::endl;
+		std::cerr << "Can't find shader porgram: "sv << "sprite_shader"sv << std::endl;
 		return false;
 	}
 
 	auto map_texture_atlas = ResourceManager::GetTexture("map_texture_atlas");
 	if(!map_texture_atlas){
-		std::cerr << "Can't find texture atlas: " << "map_texture_atlas" << std::endl;
+		std::cerr << "Can't find texture atlas: "sv << "map_texture_atlas"sv << std::endl;
 		return false;
 	}
 
 	auto tanks_texture_atlas = ResourceManager::GetTexture("tanks_texture_atlas");
 	if(!tanks_texture_atlas){
-		std::cerr << "Can't find texture atlas: " << "tanks_texture_atlas" << std::endl;
+		std::cerr << "Can't find texture atlas: "sv << "tanks_texture_atlas"sv << std::endl;
 		return false;
 	}
-
-
-	auto animated_sprite = ResourceManager::LoadAnimatedSprite("NewAnimatedSprite",
-															   "tanks_texture_atlas",
-															   "sprite_shader",
-															   "block");
-
-	std::vector<std::pair<std::string, uint64_t>> water_state;
-	water_state.emplace_back(std::make_pair<std::string, uint64_t>("water1", 1'000'000'000));
-	water_state.emplace_back(std::make_pair<std::string, uint64_t>("water2", 1'000'000'000));
-	water_state.emplace_back(std::make_pair<std::string, uint64_t>("water3", 1'000'000'000));
-
-	std::vector<std::pair<std::string, uint64_t>> eagle_state;
-	eagle_state.emplace_back(std::make_pair<std::string, uint64_t>("eagle", 1'000'000'000));
-	eagle_state.emplace_back(std::make_pair<std::string, uint64_t>("dead_eagle", 1'000'000'000));
-
-	animated_sprite->InsertState("water_state", water_state);
-	animated_sprite->InsertState("eagle_state", eagle_state);
-
-	animated_sprite->SetState("water_state");
 
 	glm::mat4 pojection_matrix = glm::ortho(0.f, static_cast<float>(window_size_.x),
 											0.f, static_cast<float>(window_size_.y),
 											-100.f, 100.f);
 
-
 	sprite_shader_program->Use();
-	sprite_shader_program->SetInt("tex", 0);
-	sprite_shader_program->SetMatrix4("projection_matrix", pojection_matrix);
+	sprite_shader_program->SetInt("tex"s, 0);
+	sprite_shader_program->SetMatrix4("projection_matrix"s, pojection_matrix);
 
-	auto tank_animated_sprite = ResourceManager::GetAnimatedSprite("tank_animated_sprite");
-	if(!tank_animated_sprite){
-		std::cerr << "Can't find texture atlas: " << "tanks_texture_atlas" << std::endl;
-		return false;
-	}
-	tank_ = std::make_unique<Tank>(tank_animated_sprite, 0.0000001f, glm::vec2(0), glm::vec2(16.f, 16.f));
+	tank_ = std::make_unique<Tank>(ResourceManager::GetSprite("tank_top_state"s), 
+								   ResourceManager::GetSprite("tank_bottom_state"s),
+								   ResourceManager::GetSprite("tank_left_state"s),
+								   ResourceManager::GetSprite("tank_right_state"s), 
+								   0.0000001f, glm::vec2(0), glm::vec2(16.f, 16.f));
 
 	level_ = std::make_unique<Level>(ResourceManager::GetLevels()[0]);
 	return true;
