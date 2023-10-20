@@ -9,6 +9,45 @@
 
   "texture_atlases": [
     {
+      "name": "map_texture_atlas_8x8",
+      "filepath": "res/textures/map_8x8.png",
+      "subtexture_width": 8,
+      "subtexture_height": 8,
+      "subtextures": [
+        "brick_all",
+        "brick_top_left",
+        "brick_top_right",
+
+        "brick_top",
+        "brick_bottom_left",
+        "brick_left",
+
+        "brick_top_right_bottom_left",
+        "brick_top_bottom_left",
+        "brick_bottom_right",
+
+        "brick_top_left_bottom_right",
+        "brick_right",
+        "brick_top_bottom_right",
+
+        "brick_bottom",
+        "brick_top_left_bottom",
+        "brick_top_right_bottom",
+
+        "water1",
+        "water2",
+        "water3",
+
+        "beton",
+        "trees",
+        "ice",
+        "wall",
+        "eagle",
+        "bullet",
+        "nothing"
+      ]
+    },
+    {
       "name": "map_texture_atlas",
       "filepath": "res/textures/map_16x16.png",
       "subtexture_width": 16,
@@ -66,62 +105,98 @@
   ],
   "sprites": [
     {
-      "name": "brick_wall",
-      "texture_atlas": "map_texture_atlas",
+      "name": "brick_all",
+      "texture_atlas": "map_texture_atlas_8x8",
       "shader": "sprite_shader",
-      "initial_subtexture": "brick_wall"
+      "initial_subtexture": "brick_all"
     },
     {
-      "name": "brick_wall_top",
-      "texture_atlas": "map_texture_atlas",
+      "name": "brick_top_left",
+      "texture_atlas": "map_texture_atlas_8x8",
       "shader": "sprite_shader",
-      "initial_subtexture": "brick_wall_top"
+      "initial_subtexture": "brick_top_left"
     },
     {
-      "name": "brick_wall_bottom",
-      "texture_atlas": "map_texture_atlas",
+      "name": "brick_top_right",
+      "texture_atlas": "map_texture_atlas_8x8",
       "shader": "sprite_shader",
-      "initial_subtexture": "brick_wall_bottom"
+      "initial_subtexture": "brick_top_right"
     },
     {
-      "name": "brick_wall_left",
-      "texture_atlas": "map_texture_atlas",
+      "name": "brick_top",
+      "texture_atlas": "map_texture_atlas_8x8",
       "shader": "sprite_shader",
-      "initial_subtexture": "brick_wall_left"
+      "initial_subtexture": "brick_top"
     },
     {
-      "name": "brick_wall_right",
-      "texture_atlas": "map_texture_atlas",
+      "name": "brick_bottom_left",
+      "texture_atlas": "map_texture_atlas_8x8",
       "shader": "sprite_shader",
-      "initial_subtexture": "brick_wall_right"
+      "initial_subtexture": "brick_bottom_left"
     },
     {
-      "name": "brick_wall_top_left",
-      "texture_atlas": "map_texture_atlas",
+      "name": "brick_left",
+      "texture_atlas": "map_texture_atlas_8x8",
       "shader": "sprite_shader",
-      "initial_subtexture": "brick_wall_top_left"
+      "initial_subtexture": "brick_left"
     },
     {
-      "name": "brick_wall_top_right",
-      "texture_atlas": "map_texture_atlas",
+      "name": "brick_top_right_bottom_left",
+      "texture_atlas": "map_texture_atlas_8x8",
       "shader": "sprite_shader",
-      "initial_subtexture": "brick_wall_top_right"
+      "initial_subtexture": "brick_top_right_bottom_left"
     },
     {
-      "name": "brick_wall_bottom_left",
-      "texture_atlas": "map_texture_atlas",
+      "name": "brick_top_bottom_left",
+      "texture_atlas": "map_texture_atlas_8x8",
       "shader": "sprite_shader",
-      "initial_subtexture": "brick_wall_bottom_left"
+      "initial_subtexture": "brick_top_bottom_left"
     },
     {
-      "name": "brick_wall_bottom_right",
-      "texture_atlas": "map_texture_atlas",
+      "name": "brick_bottom_right",
+      "texture_atlas": "map_texture_atlas_8x8",
       "shader": "sprite_shader",
-      "initial_subtexture": "brick_wall_bottom_right"
+      "initial_subtexture": "brick_bottom_right"
+    },
+    {
+      "name": "brick_top_left_bottom_right",
+      "texture_atlas": "map_texture_atlas_8x8",
+      "shader": "sprite_shader",
+      "initial_subtexture": "brick_top_left_bottom_right"
+    },
+    {
+      "name": "brick_right",
+      "texture_atlas": "map_texture_atlas_8x8",
+      "shader": "sprite_shader",
+      "initial_subtexture": "brick_right"
+    },
+    {
+      "name": "brick_top_bottom_right",
+      "texture_atlas": "map_texture_atlas_8x8",
+      "shader": "sprite_shader",
+      "initial_subtexture": "brick_top_bottom_right"
+    },
+    {
+      "name": "brick_bottom",
+      "texture_atlas": "map_texture_atlas_8x8",
+      "shader": "sprite_shader",
+      "initial_subtexture": "brick_bottom"
+    },
+    {
+      "name": "brick_top_left_bottom",
+      "texture_atlas": "map_texture_atlas_8x8",
+      "shader": "sprite_shader",
+      "initial_subtexture": "brick_top_left_bottom"
+    },
+    {
+      "name": "brick_top_right_bottom",
+      "texture_atlas": "map_texture_atlas_8x8",
+      "shader": "sprite_shader",
+      "initial_subtexture": "brick_top_right_bottom"
     },
     {
       "name": "nothing",
-      "texture_atlas": "map_texture_atlas",
+      "texture_atlas": "map_texture_atlas_8x8",
       "shader": "sprite_shader",
       "initial_subtexture": "beton"
     },
@@ -198,11 +273,11 @@
         "D1D1D1D1D1D1D",
         "D4D4D4D4D4D4D",
         "D4D4D4D4D4D4D",
-        "D4D4D494D4D4D",
+        "D4D4D444D4D4D",
         "D4D4D3D3D4D4D",
         "D3D3D1D1D3D3D",
         "1D11D3D3D11D1",
-        "8D33D1D1D33D8",
+        "4D33D1D1D33D4",
         "D1D1D444D1D1D",
         "D4D4D4D4D4D4D",
         "D4D4D3D3D4D4D",

@@ -13,7 +13,7 @@ public:
 	~Game();
 
 	void Render();
-	void Update(const uint32_t delta);
+	void Update(const uint64_t delta);
 	void SetKey(const int key, int action);
 	bool Initialize();
 

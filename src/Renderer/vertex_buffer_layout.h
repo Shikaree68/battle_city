@@ -7,10 +7,10 @@
 
 namespace RenderEngine {
 struct VertexBufferLayoutElement{
-	GLint count;
+	GLint64 count;
 	GLenum type;
 	GLboolean normalized;
-	uint32_t size;
+	size_t size;
 };
 
 class VertexBufferLayout{
@@ -18,15 +18,15 @@ public:
 	VertexBufferLayout();
 
 	void ReserveElements(const size_t count);
-	uint32_t GetStride() const{
+	int64_t GetStride() const{
 		return stride_;
 	}
-	void AddElementLayoutFloat(const int32_t count, const bool normilozed);
+	void AddElementLayoutFloat(const int64_t count, const bool normilozed);
 	const std::vector<VertexBufferLayoutElement>& GetLayoutElements() const{
 		return layout_elements_;
 	}
 private:
 	std::vector<VertexBufferLayoutElement> layout_elements_;
-	uint32_t stride_;
+	int64_t stride_;
 };
 }  // namespace Renderer

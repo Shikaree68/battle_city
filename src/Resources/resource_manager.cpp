@@ -14,6 +14,8 @@
 #define STBI_ONLY_PNG
 #include "stb_image.h"
 
+using namespace std::literals;
+
 ResourceManager::ShaderProgramsMap ResourceManager::shader_programs_;
 ResourceManager::TexturesMap ResourceManager::textures_;
 ResourceManager::SpritesMap ResourceManager::sprites_;
@@ -21,7 +23,7 @@ std::string ResourceManager::path_;
 std::vector<std::vector<std::string>> ResourceManager::levels_;
 
 void ResourceManager::SetExecutablePath(const std::string& executable_path){
-	size_t found = executable_path.find_last_of("/\\");
+	size_t found = executable_path.find_last_of("/\\"sv);
 	path_ = executable_path.substr(0, found);
 }
 
@@ -36,13 +38,13 @@ std::shared_ptr<RenderEngine::ShaderProgram> ResourceManager::LoadShaders(const 
 																		  const std::string& fragment_path){
 	std::string vertex_str = GetFileString(vertex_path);
 	if(vertex_str.empty()){
-		std::cerr << "No vertex shader!" << std::endl;
+		std::cerr << "No vertex shader!"sv << std::endl;
 		return nullptr;
 	}
 
 	std::string fragment_str = GetFileString(fragment_path);
 	if(fragment_str.empty()){
-		std::cerr << "No fragment shader!" << std::endl;
+		std::cerr << "No fragment shader!"sv << std::endl;
 		return nullptr;
 	}
 
@@ -51,8 +53,8 @@ std::shared_ptr<RenderEngine::ShaderProgram> ResourceManager::LoadShaders(const 
 	if(new_shader->IsCompiled()){
 		return new_shader;
 	}
-	std::cerr << "Can't load shader program:"
-		<< "\nVertex: " << vertex_path << "\nFragment: " << fragment_path
+	std::cerr << "Can't load shader program:"sv
+		<< "\nVertex: "sv << vertex_path << "\nFragment: "sv << fragment_path
 		<< std::endl;
 	return nullptr;
 }
@@ -62,7 +64,7 @@ std::shared_ptr<RenderEngine::ShaderProgram> ResourceManager::GetShaderProgram(c
 	if(it != shader_programs_.end()){
 		return it->second;
 	}
-	std::cerr << "Can't find the shader program: " << shader_name << std::endl;
+	std::cerr << "Can't find the shader program: "sv << shader_name << std::endl;
 	return nullptr;
 }
 
@@ -76,7 +78,7 @@ ResourceManager::LoadTexture(const std::string& texture_name, const std::string&
 	unsigned char* pixels = stbi_load(std::string(path_ + '/' + texture_path).c_str(), &width, &height, &channels, 0);
 
 	if(!pixels){
-		std::cerr << "Can't load image: " << texture_path << std::endl;
+		std::cerr << "Can't load image: "sv << texture_path << std::endl;
 		return nullptr;
 	}
 
@@ -92,7 +94,7 @@ std::shared_ptr<RenderEngine::Texture2D>ResourceManager::GetTexture(const std::s
 	if(it != textures_.end()){
 		return it->second;
 	}
-	std::cerr << "Can't find the texture: " << texture_name << std::endl;
+	std::cerr << "Can't find the texture: "sv << texture_name << std::endl;
 	return nullptr;
 }
 
@@ -102,12 +104,12 @@ std::shared_ptr<RenderEngine::Sprite> ResourceManager::LoadSprite(const std::str
 																  const std::string& sub_texture_name){
 	auto texture{GetTexture(texture_name)};
 	if(!texture){
-		std::cerr << "Can't find texture: " << texture_name << " for the sprite: " << sprite_name << std::endl;
+		std::cerr << "Can't find texture: "sv << texture_name << " for the sprite: "sv << sprite_name << std::endl;
 	}
 
 	auto shader{GetShaderProgram(shader_name)};
 	if(!shader){
-		std::cerr << "Can't find shader: " << shader_name << " for the sprite: " << sprite_name << std::endl;
+		std::cerr << "Can't find shader: "sv << shader_name << " for the sprite: "sv << sprite_name << std::endl;
 	}
 	std::shared_ptr<RenderEngine::Sprite> new_sprite = sprites_.emplace(sprite_name, std::make_shared<RenderEngine::Sprite>(
 		texture, sub_texture_name, shader)).first->second;
@@ -120,7 +122,7 @@ std::shared_ptr<RenderEngine::Sprite> ResourceManager::GetSprite(const std::stri
 	if(sprite != sprites_.end()){
 		return sprite->second;
 	}
-	std::cerr << "Can't find the sprite: " << sprite_name << std::endl;
+	std::cerr << "Can't find the sprite: "sv << sprite_name << std::endl;
 	return nullptr;
 }
 
@@ -129,16 +131,16 @@ bool ResourceManager::LoadJsonResources(const std::string& json_path){
 	const std::string json_string = GetFileString(json_path);
 	if(json_string.empty()){
 
-		std::cerr << "No JSON resources file!" << std::endl;
+		std::cerr << "No JSON resources file!"sv << std::endl;
 		return false;
 	}
 
 	rapidjson::Document document;
 	rapidjson::ParseResult parse_result = document.Parse(json_string.c_str());
 	if(!parse_result){
-		std::cerr << "JSON parse error: " << rapidjson::GetParseError_En(parse_result.Code())
+		std::cerr << "JSON parse error: "sv << rapidjson::GetParseError_En(parse_result.Code())
 			<< '(' << parse_result.Offset() << ')' << std::endl;
-		std::cerr << "In JSON file: " << json_path << std::endl;
+		std::cerr << "In JSON file: "sv << json_path << std::endl;
 		return false;
 	}
 
@@ -264,7 +266,7 @@ std::string ResourceManager::GetFileString(const std::string& relative_path){
 	std::ifstream ifs;
 	ifs.open(path_ + '/' + relative_path.c_str(), std::ios::in | std::ios::binary);
 	if(!ifs.is_open()){
-		std::cerr << "Failed to open file: " << relative_path << std::endl;
+		std::cerr << "Failed to open file: "sv << relative_path << std::endl;
 		return std::string{};
 	}
 

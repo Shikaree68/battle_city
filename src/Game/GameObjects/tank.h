@@ -18,18 +18,14 @@ public:
 		Left,
 		Right,
 	};
-	Tank(std::shared_ptr<RenderEngine::Sprite> sprite_top,
-		 std::shared_ptr<RenderEngine::Sprite> sprite_bottom,
-		 std::shared_ptr<RenderEngine::Sprite> sprite_left ,
-		 std::shared_ptr<RenderEngine::Sprite> sprite_right, 
-		 const float velocity,
+	Tank(const float velocity,
 		 const glm::vec2& position, 
 		 const glm::vec2& size);
 
 	void Render() const override;
 	void SetOrientation(const Orientation orientation);
 	void Move(bool is_move);
-	void Update(const uint32_t delta) override;
+	void Update(const uint64_t delta) override;
 private:
 	Orientation orientation_;
 

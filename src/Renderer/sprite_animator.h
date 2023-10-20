@@ -9,7 +9,7 @@ public:
 	size_t GetCurrentFrame() const{
 		return current_frame_;
 	}
-	void Update(const uint32_t delta);
+	void Update(const uint64_t delta);
 private:
 	std::shared_ptr<Sprite> sprite_;
 	size_t current_frame_;

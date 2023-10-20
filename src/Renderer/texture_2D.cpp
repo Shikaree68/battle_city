@@ -53,8 +53,7 @@ void Texture2D::AddSubTexture(std::string name, const glm::vec2& left_bottom_uv,
   sub_textures_.emplace(std::move(name),
                         SubTexture2d(left_bottom_uv, right_top_uv));
 }
-const Texture2D::SubTexture2d& Texture2D::GetSubTexture(
-    const std::string& name) const {
+const Texture2D::SubTexture2d& Texture2D::GetSubTexture(const std::string& name) const {
   auto it{sub_textures_.find(name)};
   if (it != sub_textures_.end()) {
     return it->second;

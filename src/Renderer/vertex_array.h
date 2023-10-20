@@ -24,6 +24,6 @@ public:
 
 private:
 	GLuint index_ = 0;
-	uint32_t elements_count_ = 0;
+	size_t elements_count_ = 0;
 };
 }  // namespace Renderer

@@ -1,17 +1,61 @@
 #pragma once
 
 #include "game_object_interface.h"
+
+#include <array>
 #include <memory>
 
 namespace RenderEngine{
 class Sprite;
 }
+
 class BrickWall: public GameObject{
 public:
-	BrickWall(const std::shared_ptr<RenderEngine::Sprite> sprite,
-			  const glm::vec2& position, const glm::vec2& size, const float rotation);
+	enum class Type{
+		All = 0,
+		Top,
+		Bottom,
+		Left,
+		Right,
+		TopLeft,
+		TopRight,
+		BottomLeft,
+		BottomRight
+	};
+
+	enum class State{
+        All = 0,
+        Top_left,
+        Top_right,
+        Top,
+        Bottom_left,
+        Left,
+        Top_right_bottom_left,
+        Top_bottom_left,
+        Bottom_right,
+        Top_left_bottom_right,
+        Right,
+        Top_bottom_right,
+        Bottom,
+        Top_left_bottom,
+        Top_right_bottom,
+		Destroyed
+	};
+	enum class Location{
+		TopLeft = 0,
+		TopRight,
+		BottomLeft,
+		BottomRight
+	};
+	BrickWall(const Type brick_wall_type,
+			  const glm::vec2& position,
+			  const glm::vec2& size, 
+			  const float rotation);
 	void Render() const override;
-	void Update(const uint32_t delta) override;
+	void Update(const uint64_t delta) override;
 private:
-	std::shared_ptr<RenderEngine::Sprite> sprite_;
+	std::array<State, 4> current_state_;
+ 	std::array<std::shared_ptr<RenderEngine::Sprite>, 15> sprites_;
+
+	void RenderBlock(const Location location) const;
 };

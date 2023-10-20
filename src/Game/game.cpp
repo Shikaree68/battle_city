@@ -24,17 +24,15 @@ Game::Game(const glm::ivec2& window_size)
 Game::~Game(){}
 
 void Game::Render(){
-	//ResourceManager::GetAnimatedSprite("NewAnimatedSprite")->Render();
-	if(level_){
-		level_->Render();
-	}
 	if(tank_){
 		tank_->Render();
 	}
+	if(level_){
+		level_->Render();
+	}
 }
 
-void Game::Update(const uint32_t delta){
-	//ResourceManager::GetAnimatedSprite("NewAnimatedSprite")->Update(delta);
+void Game::Update(const uint64_t delta){
 	if(level_){
 		level_->Update(delta);
 	}
@@ -70,18 +68,6 @@ bool Game::Initialize(){
 		return false;
 	}
 
-	auto map_texture_atlas = ResourceManager::GetTexture("map_texture_atlas");
-	if(!map_texture_atlas){
-		std::cerr << "Can't find texture atlas: "sv << "map_texture_atlas"sv << std::endl;
-		return false;
-	}
-
-	auto tanks_texture_atlas = ResourceManager::GetTexture("tanks_texture_atlas");
-	if(!tanks_texture_atlas){
-		std::cerr << "Can't find texture atlas: "sv << "tanks_texture_atlas"sv << std::endl;
-		return false;
-	}
-
 	glm::mat4 pojection_matrix = glm::ortho(0.f, static_cast<float>(window_size_.x),
 											0.f, static_cast<float>(window_size_.y),
 											-100.f, 100.f);
@@ -90,11 +76,7 @@ bool Game::Initialize(){
 	sprite_shader_program->SetInt("tex"s, 0);
 	sprite_shader_program->SetMatrix4("projection_matrix"s, pojection_matrix);
 
-	tank_ = std::make_unique<Tank>(ResourceManager::GetSprite("tank_top_state"s), 
-								   ResourceManager::GetSprite("tank_bottom_state"s),
-								   ResourceManager::GetSprite("tank_left_state"s),
-								   ResourceManager::GetSprite("tank_right_state"s), 
-								   0.0000001f, glm::vec2(0), glm::vec2(16.f, 16.f));
+	tank_ = std::make_unique<Tank>(0.0000001f, glm::vec2(0), glm::vec2(16.f, 16.f));
 
 	level_ = std::make_unique<Level>(ResourceManager::GetLevels()[0]);
 	return true;

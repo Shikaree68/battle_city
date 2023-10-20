@@ -1,20 +1,18 @@
 #include "tank.h"
+
+#include "../../Resources/resource_manager.h"
 #include "../../Renderer/sprite.h"
 
-
-Tank::Tank(std::shared_ptr<RenderEngine::Sprite> sprite_top,
-		   std::shared_ptr<RenderEngine::Sprite> sprite_bottom,
-		   std::shared_ptr<RenderEngine::Sprite> sprite_left,
-		   std::shared_ptr<RenderEngine::Sprite> sprite_right,
-		   const float velocity,
+using namespace std::literals;
+Tank::Tank(const float velocity,
 		   const glm::vec2& position,
 		   const glm::vec2& size)
 	: GameObject(position, size, 0.f)
 	, orientation_(Orientation::Top)
-	, sprite_top_(sprite_top)
-	, sprite_bottom_(sprite_bottom)
-	, sprite_left_(sprite_left)
-	, sprite_right_(sprite_right)
+	, sprite_top_(ResourceManager::GetSprite("tank_top_state"s))
+	, sprite_bottom_(ResourceManager::GetSprite("tank_bottom_state"s))
+	, sprite_left_(ResourceManager::GetSprite("tank_left_state"s))
+	, sprite_right_(ResourceManager::GetSprite("tank_right_state"s))
 	, sprite_animator_top_(sprite_top_)
 	, sprite_animator_bottom_(sprite_bottom_)
 	, sprite_animator_left_(sprite_left_)
@@ -72,7 +70,7 @@ void Tank::Move(bool is_move){
 	is_move_ = is_move;
 }
 
-void Tank::Update(const uint32_t delta){
+void Tank::Update(const uint64_t delta){
 	if(is_move_){
 		position_ += delta * velocity_ * move_offset_;
 		switch(orientation_){
