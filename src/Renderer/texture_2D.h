@@ -9,13 +9,13 @@
 namespace RenderEngine {
 class Texture2D {
  public:
-  struct SubTexture2d {
+  struct subtexture2d {
     glm::vec2 left_bottom_UV;
     glm::vec2 right_top_UV;
-    SubTexture2d(const glm::vec2& _left_bottom_UV,
+    subtexture2d(const glm::vec2& _left_bottom_UV,
                  const glm::vec2& _right_top_UV)
         : left_bottom_UV(_left_bottom_UV), right_top_UV(_right_top_UV) {}
-    SubTexture2d() : left_bottom_UV(0.f), right_top_UV(1.f) {}
+    subtexture2d() : left_bottom_UV(0.f), right_top_UV(1.f) {}
   };
 
   struct Size {
@@ -37,9 +37,9 @@ class Texture2D {
   Texture2D(const Texture2D&) = delete;
   Texture2D& operator=(const Texture2D&) = delete;
 
-  void AddSubTexture(std::string name, const glm::vec2& left_bottom_uv,
+  void Addsubtexture(std::string name, const glm::vec2& left_bottom_uv,
                      const glm::vec2& right_top_uv);
-  const SubTexture2d& GetSubTexture(const std::string& name) const;
+  const subtexture2d& Getsubtexture(const std::string& name) const;
   Size GetSize() const { return size_; };
 
   void Bind() const;
@@ -48,6 +48,6 @@ class Texture2D {
   GLuint id_{0};
   GLenum mode_;
   Size size_;
-  std::map<std::string, SubTexture2d> sub_textures_;
+  std::map<std::string, subtexture2d> sub_textures_;
 };
 }  // namespace Renderer

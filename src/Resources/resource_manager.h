@@ -28,7 +28,7 @@ public:
 	static std::shared_ptr<RenderEngine::ShaderProgram> GetShaderProgram(const std::string& shader_name);
 
 	static std::shared_ptr<RenderEngine::Texture2D> LoadTexture(const std::string& texture_name, const std::string& texure_path);
-	static std::shared_ptr<RenderEngine::Texture2D> LoadTextureAtlas(const std::string& texture_name,
+	static std::shared_ptr<RenderEngine::Texture2D> LoadTexture_atlas(const std::string& texture_name,
 																	 const std::string& texture_path,
 																	 const std::vector<std::string>& sub_textures_names,
 																	 const uint32_t sub_texture_width,

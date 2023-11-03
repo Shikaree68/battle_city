@@ -169,7 +169,7 @@ bool ResourceManager::LoadJsonResources(const std::string& json_path){
 				subtextures.push_back(current_subtexture.GetString());
 			}
 
-			LoadTextureAtlas(name, filepath, subtextures, subtexture_width, subtexture_height);
+			LoadTexture_atlas(name, filepath, subtextures, subtexture_width, subtexture_height);
 		}
 	}
 
@@ -195,7 +195,7 @@ bool ResourceManager::LoadJsonResources(const std::string& json_path){
 					const std::string subtexture = current_frame["subtexture"].GetString();
 					const uint64_t duration = current_frame["duration"].GetUint64();
 					const auto texture_atlas_ptr = GetTexture(texture_atlas);
-					const auto subtexture_ptr = texture_atlas_ptr->GetSubTexture(subtexture);
+					const auto subtexture_ptr = texture_atlas_ptr->Getsubtexture(subtexture);
 					frames_descriptions.emplace_back(subtexture_ptr.left_bottom_UV, subtexture_ptr.right_top_UV, duration);
 				}
 				sprite->InsertFrames(std::move(frames_descriptions));
@@ -231,7 +231,7 @@ const std::vector<std::vector<std::string>>& ResourceManager::GetLevels(){
 	return levels_;
 }
 
-std::shared_ptr<RenderEngine::Texture2D> ResourceManager::LoadTextureAtlas(const std::string& texture_name,
+std::shared_ptr<RenderEngine::Texture2D> ResourceManager::LoadTexture_atlas(const std::string& texture_name,
 																		   const std::string& texture_path,
 																		   const std::vector<std::string>& sub_textures_names,
 																		   const uint32_t sub_texture_width,
@@ -249,7 +249,7 @@ std::shared_ptr<RenderEngine::Texture2D> ResourceManager::LoadTextureAtlas(const
 			glm::vec2 right_top_UV{static_cast<float>(current_texture_offset_x + sub_texture_width - 0.01f) / texture_width,
 				static_cast<float>(current_texture_offset_y - 0.01f) / texture_height};
 
-			texture->AddSubTexture(current_sub_texture_name, left_bottom_UV, right_top_UV);
+			texture->Addsubtexture(current_sub_texture_name, left_bottom_UV, right_top_UV);
 
 			current_texture_offset_x += sub_texture_width;
 

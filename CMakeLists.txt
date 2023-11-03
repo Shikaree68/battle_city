@@ -51,6 +51,8 @@ add_executable(${PROJECT_NAME}
     src/Game/GameObjects/tank.h   
     src/Game/GameObjects/brick_wall.cpp
     src/Game/GameObjects/brick_wall.h
+    src/Game/GameObjects/beton_wall.cpp
+    src/Game/GameObjects/beton_wall.h
 
     res/shaders/vertex.vert
     res/shaders/fragment.frag
@@ -73,6 +75,8 @@ include_directories(external/glm)
 include_directories(external/rapidjson/include)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/)
+
+#set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${PROJECT_NAME})
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD 
                     COMMAND ${CMAKE_COMMAND} -E copy_directory

@@ -48,17 +48,17 @@ Texture2D::Texture2D(Texture2D&& texture_2d) noexcept {
   size_ = texture_2d.size_;
 }
 Texture2D::~Texture2D() { glDeleteTextures(1, &id_); }
-void Texture2D::AddSubTexture(std::string name, const glm::vec2& left_bottom_uv,
+void Texture2D::Addsubtexture(std::string name, const glm::vec2& left_bottom_uv,
                               const glm::vec2& right_top_uv) {
   sub_textures_.emplace(std::move(name),
-                        SubTexture2d(left_bottom_uv, right_top_uv));
+                        subtexture2d(left_bottom_uv, right_top_uv));
 }
-const Texture2D::SubTexture2d& Texture2D::GetSubTexture(const std::string& name) const {
+const Texture2D::subtexture2d& Texture2D::Getsubtexture(const std::string& name) const {
   auto it{sub_textures_.find(name)};
   if (it != sub_textures_.end()) {
     return it->second;
   }
-  const static SubTexture2d default_sub_texture;
+  const static subtexture2d default_sub_texture;
   return default_sub_texture;
 }
 void Texture2D::Bind() const { glBindTexture(GL_TEXTURE_2D, id_); }

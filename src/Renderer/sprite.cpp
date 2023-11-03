@@ -7,15 +7,15 @@
 #include "glm/mat4x4.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
-namespace RenderEngine{
+namespace RenderEngine {
 Sprite::Sprite(std::shared_ptr<Texture2D> texture,
 			   const std::string& initial_sub_texture,
 			   std::shared_ptr<ShaderProgram> shader_program)
 	: texture_(std::move(texture))
 	, shader_program_(std::move(shader_program))
-	, last_frame_id_(0){
+	, last_frame_id_(0) {
 
-	const GLfloat vertex_coords[]{
+	const GLfloat vertex_coords[] {
 		//1--2
 		//| /|
 		//0--3
@@ -28,9 +28,9 @@ Sprite::Sprite(std::shared_ptr<Texture2D> texture,
 		1.f, 0.f,
 	};
 
-	auto& sub_texture{texture_->GetSubTexture(initial_sub_texture)};
+	auto& sub_texture { texture_->Getsubtexture(initial_sub_texture) };
 
-	const GLfloat texture_coords[]{
+	const GLfloat texture_coords[] {
 		// U  V
 		sub_texture.left_bottom_UV.x, sub_texture.left_bottom_UV.y,
 		sub_texture.left_bottom_UV.x, sub_texture.right_top_UV.y,
@@ -38,7 +38,7 @@ Sprite::Sprite(std::shared_ptr<Texture2D> texture,
 		sub_texture.right_top_UV.x, sub_texture.left_bottom_UV.y,
 	};
 
-	const GLuint indices[]{
+	const GLuint indices[] {
 		// U  V
 		0, 1, 2,
 		2, 3, 0,
@@ -58,23 +58,21 @@ Sprite::Sprite(std::shared_ptr<Texture2D> texture,
 	vertex_array_.Unbind();
 	index_buffer_.Unbind();
 }
-Sprite::~Sprite(){}
+Sprite::~Sprite() {}
 
-void Sprite::Render(const glm::vec2& position, const glm::vec2& size, const float rotation, const size_t frame_id) const{
-	if(last_frame_id_ == frame_id){
-		return;
+void Sprite::Render(const glm::vec2& position, const glm::vec2& size, const float rotation, const size_t frame_id) const {
+	if (last_frame_id_ != frame_id) {
+		last_frame_id_ = frame_id;
+		const FrameDescription& current_frame_description = frames_decriptions_ [frame_id];
+		const GLfloat texture_coords[] {
+			// U  V
+			current_frame_description.left_bottom_UV.x, current_frame_description.left_bottom_UV.y,
+			current_frame_description.left_bottom_UV.x, current_frame_description.right_top_UV.y,
+			current_frame_description.right_top_UV.x,   current_frame_description.right_top_UV.y,
+			current_frame_description.right_top_UV.x,   current_frame_description.left_bottom_UV.y,
+		};
+		texuter_coords_buffer_.Update(texture_coords, 2 * 4 * sizeof(GLfloat));
 	}
-	last_frame_id_ = frame_id;
-	const FrameDescription& current_frame_description = frames_decriptions_[frame_id];
-	const GLfloat texture_coords[]{
-		// U  V
-		current_frame_description.left_bottom_UV.x, current_frame_description.left_bottom_UV.y,
-		current_frame_description.left_bottom_UV.x, current_frame_description.right_top_UV.y,
-		current_frame_description.right_top_UV.x,   current_frame_description.right_top_UV.y,
-		current_frame_description.right_top_UV.x,   current_frame_description.left_bottom_UV.y,
-	};
-	texuter_coords_buffer_.Update(texture_coords, 2 * 4 * sizeof(GLfloat));
-
 	shader_program_->Use();
 
 	glm::mat4 model(1.f);
@@ -94,14 +92,14 @@ void Sprite::Render(const glm::vec2& position, const glm::vec2& size, const floa
 	Renderer::Draw(vertex_array_, index_buffer_, *shader_program_);
 }
 
-void Sprite::InsertFrames(std::vector<FrameDescription> frames_descriptions){
+void Sprite::InsertFrames(std::vector<FrameDescription> frames_descriptions) {
 	frames_decriptions_ = std::move(frames_descriptions);
 }
 
-uint64_t Sprite::GetFrameDuration(const size_t frame_id) const{
-	return frames_decriptions_[frame_id].duration;
+uint64_t Sprite::GetFrameDuration(const size_t frame_id) const {
+	return frames_decriptions_ [frame_id].duration;
 }
-size_t Sprite::GetFramesCount() const{
+size_t Sprite::GetFramesCount() const {
 	return frames_decriptions_.size();
 }
 }

@@ -9,7 +9,7 @@ namespace RenderEngine{
 class Sprite;
 }
 
-class BrickWall: public GameObject{
+class BetonWall: public GameObject{
 public:
 	enum class Type{
 		All = 0,
@@ -25,20 +25,6 @@ public:
 
 	enum class State{
         All = 0,
-        Top_left,
-        Top_right,
-        Top,
-        Bottom_left,
-        Left,
-        Top_right_bottom_left,
-        Top_bottom_left,
-        Bottom_right,
-        Top_left_bottom_right,
-        Right,
-        Top_bottom_right,
-        Bottom,
-        Top_left_bottom,
-        Top_right_bottom,
 		Destroyed
 	};
 	enum class Location{
@@ -47,7 +33,7 @@ public:
 		BottomLeft,
 		BottomRight
 	};
-	BrickWall(const Type brick_wall_type,
+	BetonWall(const Type brick_wall_type,
 			  const glm::vec2& position,
 			  const glm::vec2& size, 
 			  const float rotation);
@@ -55,7 +41,7 @@ public:
 	void Update(const uint64_t delta) override;
 private:
 	std::array<State, 4> current_state_;
- 	std::array<std::shared_ptr<RenderEngine::Sprite>, 15> sprites_;
+ 	std::shared_ptr<RenderEngine::Sprite> sprite_;
 	std::array<glm::vec2, 4> block_offsets_;
 	void RenderBlock(const Location location) const;
 };

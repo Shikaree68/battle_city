@@ -64,17 +64,17 @@ bool Game::Initialize(){
 	ResourceManager::LoadJsonResources("res/resources.json"s);
 	auto sprite_shader_program = ResourceManager::GetShaderProgram("sprite_shader"s);
 	if(!sprite_shader_program){
-		std::cerr << "Can't find shader porgram: "sv << "sprite_shader"sv << std::endl;
+		std::cerr << "Can't find shader program: "sv << "sprite_shader"sv << std::endl;
 		return false;
 	}
 
-	glm::mat4 pojection_matrix = glm::ortho(0.f, static_cast<float>(window_size_.x),
+	glm::mat4 projection_matrix = glm::ortho(0.f, static_cast<float>(window_size_.x),
 											0.f, static_cast<float>(window_size_.y),
 											-100.f, 100.f);
 
 	sprite_shader_program->Use();
 	sprite_shader_program->SetInt("tex"s, 0);
-	sprite_shader_program->SetMatrix4("projection_matrix"s, pojection_matrix);
+	sprite_shader_program->SetMatrix4("projection_matrix"s, projection_matrix);
 
 	tank_ = std::make_unique<Tank>(0.0000001f, glm::vec2(0), glm::vec2(16.f, 16.f));
 
