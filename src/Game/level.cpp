@@ -2,6 +2,11 @@
 
 #include"GameObjects/brick_wall.h"
 #include"GameObjects/beton_wall.h"
+#include"GameObjects/trees.h"
+#include"GameObjects/ice.h"
+#include"GameObjects/water.h"
+#include"GameObjects/eagle.h"
+
 #include<iostream>
 
 using namespace std::literals;
@@ -33,18 +38,17 @@ std::shared_ptr<GameObject> create_gameobject(const char description,
 		return std::make_shared<BetonWall>(BetonWall::Type::Top, position, size, rotation);
 	case '9':
 		return std::make_shared<BetonWall>(BetonWall::Type::All, position, size, rotation);
-		/*
-		case 'A':
-			return std::make_shared<BrickWall>(ResourceManager::GetSprite("brick_wall"), position, size, rotation);
-		case 'B':
-			return std::make_shared<BrickWall>(ResourceManager::GetSprite("brick_wall"), position, size, rotation);
-		case 'C':
-			return std::make_shared<BrickWall>(ResourceManager::GetSprite("brick_wall"), position, size, rotation);
-			*/
+	case 'A':
+		return std::make_shared<Water>( position, size, rotation);
+	case 'B':
+		return std::make_shared<Trees>(position, size, rotation);
+	case 'C':
+		return std::make_shared<Ice>(position, size, rotation);
+
 	case 'D':
 		return nullptr;
 	case 'E':
-		return nullptr;
+		return std::make_shared<Eagle>(position, size, rotation);
 		/*
 		case 'F':
 			return std::make_shared<BrickWall>(ResourceManager::GetSprite("brick_wall"), position, size, rotation);

@@ -52,7 +52,15 @@ add_executable(${PROJECT_NAME}
     src/Game/GameObjects/brick_wall.cpp
     src/Game/GameObjects/brick_wall.h
     src/Game/GameObjects/beton_wall.cpp
-    src/Game/GameObjects/beton_wall.h
+    src/Game/GameObjects/beton_wall.h 
+    src/Game/GameObjects/trees.cpp
+    src/Game/GameObjects/trees.h
+    src/Game/GameObjects/ice.cpp
+    src/Game/GameObjects/ice.h  
+    src/Game/GameObjects/water.cpp
+    src/Game/GameObjects/water.h    
+    src/Game/GameObjects/eagle.cpp
+    src/Game/GameObjects/eagle.h
 
     res/shaders/vertex.vert
     res/shaders/fragment.frag

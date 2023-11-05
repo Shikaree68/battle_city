@@ -11,7 +11,7 @@ class Sprite;
 
 class BrickWall: public GameObject{
 public:
-	enum class Type{
+	enum class Type : uint8_t {
 		All = 0,
 		Top,
 		Bottom,
@@ -23,7 +23,7 @@ public:
 		BottomRight
 	};
 
-	enum class State{
+	enum class State : uint8_t {
         All = 0,
         Top_left,
         Top_right,
@@ -41,7 +41,7 @@ public:
         Top_right_bottom,
 		Destroyed
 	};
-	enum class Location{
+	enum class Location : uint8_t {
 		TopLeft = 0,
 		TopRight,
 		BottomLeft,

@@ -322,7 +322,7 @@
 
 
     {
-      "name": "eagle",
+      "name": "eagle_alive",
       "texture_atlas": "map_texture_atlas",
       "shader": "sprite_shader",
       "initial_subtexture": "eagle"
@@ -513,6 +513,24 @@
         "D4D4D4D4D4D4D",
         "D4D4D3D3D4D4D",
         "D4D4DH1GDDDDD",
+        "DDDDD0E2DDDDD"
+      ]
+    },
+    {
+      "description": [
+        "DDDDDDDDDDDDD",
+        "D00D11D22D33D",
+        "D4D4D4D4D4D4D",
+        "D5D5D5D5D5D5D",
+        "D6D6D696D6D6D",
+        "D7D7D7D7D7D7D",
+        "D8D8D8D8D8D8D",
+        "9D19D9D9D19D1",
+        "6DB3DADAD3AD6",
+        "D1DBD4B4DBD1D",
+        "D4CCD4CCD4D4D",
+        "DGG4GGDHH4HHD",
+        "DJDJDH1GDJDJD",
         "DDDDD0E2DDDDD"
       ]
     }

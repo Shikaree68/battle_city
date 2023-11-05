@@ -12,7 +12,7 @@ class Sprite;
 
 class Tank : public GameObject{
 public:
-	enum class Orientation{
+	enum class Orientation : uint8_t {
 		Top,
 		Bottom,
 		Left,
