@@ -62,8 +62,8 @@ add_executable(${PROJECT_NAME}
     src/Game/GameObjects/eagle.cpp
     src/Game/GameObjects/eagle.h
 
-    res/shaders/vertex.vert
-    res/shaders/fragment.frag
+    res/shaders/sprite_v.vert
+    res/shaders/sprite_f.frag
     res/resources.json
 )
 
