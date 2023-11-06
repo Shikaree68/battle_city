@@ -76,7 +76,7 @@ bool Game::Initialize(){
 	sprite_shader_program->SetInt("tex"s, 0);
 	sprite_shader_program->SetMatrix4("projection_matrix"s, projection_matrix);
 
-	tank_ = std::make_unique<Tank>(0.0000001f, glm::vec2(0), glm::vec2(16.f, 16.f));
+	tank_ = std::make_unique<Tank>(0.0000001f, glm::vec2(0), glm::vec2(16.f, 16.f), 0.f);
 
 	level_ = std::make_unique<Level>(ResourceManager::GetLevels()[1]);
 	return true;

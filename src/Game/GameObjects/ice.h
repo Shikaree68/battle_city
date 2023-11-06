@@ -5,11 +5,11 @@
 #include <array>
 #include <memory>
 
-namespace RenderEngine{
+namespace RenderEngine {
 class Sprite;
 }
 
-class Ice: public GameObject{
+class Ice : public GameObject {
 public:
 
 	enum class Location : uint8_t {
@@ -19,12 +19,13 @@ public:
 		BottomRight
 	};
 	Ice(const glm::vec2& position,
-		  const glm::vec2& size, 
-		  const float rotation);
+		const glm::vec2& size,
+		const float rotation,
+		const float layer);
 	void Render() const override;
 	void Update(const uint64_t delta) override;
 private:
- 	std::shared_ptr<RenderEngine::Sprite> sprite_;
+	std::shared_ptr<RenderEngine::Sprite> sprite_;
 	std::array<glm::vec2, 4> block_offsets_;
 	void RenderBlock(const Location location) const;
 };

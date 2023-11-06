@@ -81,6 +81,8 @@ int main(int argc, char** argv){
 	std::cout << "OpenGL version: "sv << RenderEngine::Renderer::GetRenderVersion() << std::endl;
 
 	RenderEngine::Renderer::SetClearColor(0, 0, 0, 1);
+	RenderEngine::Renderer::SetDepthTest(true);
+
 	{
 		ResourceManager::SetExecutablePath(argv[0]);		
 		game->Initialize();

@@ -19,6 +19,7 @@ namespace RenderEngine {
 		bool IsCompiled() const { return is_compiled_; }
 		void Use() const;
 		void SetInt(const std::string& name, const GLint value);
+		void SetFloat(const std::string& name, const GLfloat value);
 		void SetMatrix4(const std::string& name, const glm::mat4& matrix);
 
 	private:

@@ -5,11 +5,12 @@
 
 using namespace std::literals;
 
-BetonWall::BetonWall(const Type brick_wall_type,
+BetonWall::BetonWall(const Type beton_wall_type,
 					 const glm::vec2& position,
 					 const glm::vec2& size,
-					 const float rotation)
-	: GameObject(position, size, rotation)
+					 const float rotation,
+					 const float layer)
+	: GameObject(position, size, rotation, layer)
 	, current_state_ {State::Destroyed,
 					  State::Destroyed,
 					  State::Destroyed,
@@ -19,7 +20,7 @@ BetonWall::BetonWall(const Type brick_wall_type,
 					  glm::vec2(size_.x / 2.f, size_.y / 2.f),
 					  glm::vec2(0,0),
 					  glm::vec2(size_.x / 2.f, 0)} {
-	switch(brick_wall_type) {
+	switch(beton_wall_type) {
 	case Type::All:
 		current_state_.fill(State::All);
 		break;
@@ -57,7 +58,7 @@ BetonWall::BetonWall(const Type brick_wall_type,
 void BetonWall::RenderBlock(const BetonWall::Location location) const {
 	const State state = current_state_[static_cast<size_t>(location)];
 	if(state != State::Destroyed) {
-		sprite_->Render(position_ + block_offsets_[static_cast<size_t>(location)], size_ / 2.f, rotation_);
+		sprite_->Render(position_ + block_offsets_[static_cast<size_t>(location)], size_ / 2.f, rotation_, layer_);
 	}
 }
 

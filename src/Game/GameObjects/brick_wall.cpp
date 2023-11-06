@@ -8,8 +8,9 @@ using namespace std::literals;
 BrickWall::BrickWall(const Type brick_wall_type,
 					 const glm::vec2& position,
 					 const glm::vec2& size,
-					 const float rotation)
-	: GameObject(position, size, rotation)
+					 const float rotation,
+					 const float layer)
+	: GameObject(position, size, rotation, layer)
 	, current_state_ {State::Destroyed,
 					  State::Destroyed,
 					  State::Destroyed,
@@ -72,7 +73,7 @@ BrickWall::BrickWall(const Type brick_wall_type,
 void BrickWall::RenderBlock(const BrickWall::Location location) const {
 	const State state = current_state_[static_cast<size_t>(location)];
 	if(state != State::Destroyed) {
-		sprites_[static_cast<size_t>(state)]->Render(position_ + block_offsets_[static_cast<size_t>(location)], size_ / 2.f, rotation_);
+		sprites_[static_cast<size_t>(state)]->Render(position_ + block_offsets_[static_cast<size_t>(location)], size_ / 2.f, rotation_, layer_);
 	}
 }
 

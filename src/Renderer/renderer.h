@@ -14,6 +14,7 @@ class Renderer{
 public:
 	static void Draw(const VertexArray& vertex_array, const IndexBuffer& index_buffer, const ShaderProgram& shader);
 	static void SetClearColor(float red, float green, float blue, float alpha);
+	static void SetDepthTest(const bool enable);
 	static void Clear();
 	static void SetViewport(uint32_t width, uint32_t height, uint32_t left_offset = 0, uint32_t bottom_offset = 0);
 

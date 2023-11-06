@@ -20,7 +20,8 @@ public:
 	};
 	Trees(const glm::vec2& position,
 		  const glm::vec2& size, 
-		  const float rotation);
+		  const float rotation,
+		  const float layer);
 	void Render() const override;
 	void Update(const uint64_t delta) override;
 private:

@@ -6,8 +6,9 @@
 using namespace std::literals;
 Tank::Tank(const float velocity,
 		   const glm::vec2& position,
-		   const glm::vec2& size)
-	: GameObject(position, size, 0.f)
+		   const glm::vec2& size,
+		   const float layer)
+	: GameObject(position, size, 0.f, layer)
 	, orientation_(Orientation::Top)
 	, sprite_top_(ResourceManager::GetSprite("tank_top_state"s))
 	, sprite_bottom_(ResourceManager::GetSprite("tank_bottom_state"s))
@@ -24,16 +25,16 @@ Tank::Tank(const float velocity,
 void Tank::Render() const{
 	switch(orientation_){
 	case Tank::Orientation::Top:
-		sprite_top_->Render(position_, size_, rotation_, sprite_animator_top_.GetCurrentFrame());
+		sprite_top_->Render(position_, size_, rotation_, layer_, sprite_animator_top_.GetCurrentFrame());
 		break;
 	case Tank::Orientation::Bottom:
-		sprite_bottom_->Render(position_, size_, rotation_, sprite_animator_bottom_.GetCurrentFrame());
+		sprite_bottom_->Render(position_, size_, rotation_, layer_, sprite_animator_bottom_.GetCurrentFrame());
 		break;
 	case Tank::Orientation::Left:
-		sprite_left_->Render(position_, size_, rotation_, sprite_animator_left_.GetCurrentFrame());
+		sprite_left_->Render(position_, size_, rotation_, layer_, sprite_animator_left_.GetCurrentFrame());
 		break;
 	case Tank::Orientation::Right:
-		sprite_right_->Render(position_, size_, rotation_, sprite_animator_right_.GetCurrentFrame());
+		sprite_right_->Render(position_, size_, rotation_, layer_, sprite_animator_right_.GetCurrentFrame());
 		break;
 	}
 }

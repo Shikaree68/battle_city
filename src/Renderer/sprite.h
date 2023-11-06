@@ -34,7 +34,11 @@ public:
 	Sprite(const Sprite&) = delete;
 	Sprite& operator=(const Sprite&) = delete;
 
-	void Render(const glm::vec2& position, const glm::vec2& size, const float rotation, const size_t frame_id = 0) const;
+	void Render(const glm::vec2& position,
+				const glm::vec2& size,
+				const float rotation,
+				const float layer = 0.f,
+				const size_t frame_id = 0) const;
 
 	void InsertFrames(std::vector<FrameDescription> frames_descriptions);
 	uint64_t GetFrameDuration(const size_t frame_id) const;

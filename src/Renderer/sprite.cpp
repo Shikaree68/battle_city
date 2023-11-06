@@ -7,6 +7,8 @@
 #include "glm/mat4x4.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
+using namespace std::literals;
+
 namespace RenderEngine {
 Sprite::Sprite(std::shared_ptr<Texture2D> texture,
 			   const std::string& initial_sub_texture,
@@ -60,7 +62,11 @@ Sprite::Sprite(std::shared_ptr<Texture2D> texture,
 }
 Sprite::~Sprite() {}
 
-void Sprite::Render(const glm::vec2& position, const glm::vec2& size, const float rotation, const size_t frame_id) const {
+void Sprite::Render(const glm::vec2& position, 
+					const glm::vec2& size, 
+					const float rotation, 
+					const float layer, 
+					const size_t frame_id) const {
 	if (last_frame_id_ != frame_id) {
 		last_frame_id_ = frame_id;
 		const FrameDescription& current_frame_description = frames_decriptions_ [frame_id];
@@ -83,7 +89,8 @@ void Sprite::Render(const glm::vec2& position, const glm::vec2& size, const floa
 	model = glm::translate(model, glm::vec3(-0.5f * size.x, -0.5f * size.y, 0.f));
 	model = glm::scale(model, glm::vec3(size, 1.f));
 
-	shader_program_->SetMatrix4("model_matrix", model);
+	shader_program_->SetMatrix4("model_matrix"s, model);
+	shader_program_->SetFloat("layer"s, layer);
 
 	glActiveTexture(GL_TEXTURE0);
 	texture_->Bind();

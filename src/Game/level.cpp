@@ -19,48 +19,47 @@ std::shared_ptr<GameObject> create_gameobject(const char description,
 											  const float rotation) {
 	switch(description) {
 	case '0':
-		return std::make_shared<BrickWall>(BrickWall::Type::Right, position, size, rotation);
+		return std::make_shared<BrickWall>(BrickWall::Type::Right, position, size, rotation, 0.f);
 	case '1':
-		return std::make_shared<BrickWall>(BrickWall::Type::Bottom, position, size, rotation);
+		return std::make_shared<BrickWall>(BrickWall::Type::Bottom, position, size, rotation, 0.f);
 	case '2':
-		return std::make_shared<BrickWall>(BrickWall::Type::Left, position, size, rotation);
+		return std::make_shared<BrickWall>(BrickWall::Type::Left, position, size, rotation, 0.f);
 	case '3':
-		return std::make_shared<BrickWall>(BrickWall::Type::Top, position, size, rotation);
+		return std::make_shared<BrickWall>(BrickWall::Type::Top, position, size, rotation, 0.f);
 	case '4':
-		return std::make_shared<BrickWall>(BrickWall::Type::All, position, size, rotation);
+		return std::make_shared<BrickWall>(BrickWall::Type::All, position, size, rotation, 0.f);
 	case '5':
-		return std::make_shared<BetonWall>(BetonWall::Type::Right, position, size, rotation);
+		return std::make_shared<BetonWall>(BetonWall::Type::Right, position, size, rotation, 0.f);
 	case '6':
-		return std::make_shared<BetonWall>(BetonWall::Type::Bottom, position, size, rotation);
+		return std::make_shared<BetonWall>(BetonWall::Type::Bottom, position, size, rotation, 0.f);
 	case '7':
-		return std::make_shared<BetonWall>(BetonWall::Type::Left, position, size, rotation);
+		return std::make_shared<BetonWall>(BetonWall::Type::Left, position, size, rotation, 0.f);
 	case '8':
-		return std::make_shared<BetonWall>(BetonWall::Type::Top, position, size, rotation);
+		return std::make_shared<BetonWall>(BetonWall::Type::Top, position, size, rotation, 0.f);
 	case '9':
-		return std::make_shared<BetonWall>(BetonWall::Type::All, position, size, rotation);
+		return std::make_shared<BetonWall>(BetonWall::Type::All, position, size, rotation, 0.f);
 	case 'A':
-		return std::make_shared<Water>( position, size, rotation);
+		return std::make_shared<Water>( position, size, rotation, 0.f);
 	case 'B':
-		return std::make_shared<Trees>(position, size, rotation);
+		return std::make_shared<Trees>(position, size, rotation, 1.f);
 	case 'C':
-		return std::make_shared<Ice>(position, size, rotation);
-
+		return std::make_shared<Ice>(position, size, rotation, -1.f);
 	case 'D':
 		return nullptr;
 	case 'E':
-		return std::make_shared<Eagle>(position, size, rotation);
+		return std::make_shared<Eagle>(position, size, rotation, 0.f);
 		/*
 		case 'F':
 			return std::make_shared<BrickWall>(ResourceManager::GetSprite("brick_wall"), position, size, rotation);
 			*/
 	case 'G':
-		return std::make_shared<BrickWall>(BrickWall::Type::BottomLeft, position, size, rotation);
+		return std::make_shared<BrickWall>(BrickWall::Type::BottomLeft, position, size, rotation, 0.f);
 	case 'H':
-		return std::make_shared<BrickWall>(BrickWall::Type::BottomRight, position, size, rotation);
+		return std::make_shared<BrickWall>(BrickWall::Type::BottomRight, position, size, rotation, 0.f);
 	case 'I':
-		return std::make_shared<BrickWall>(BrickWall::Type::TopLeft, position, size, rotation);
+		return std::make_shared<BrickWall>(BrickWall::Type::TopLeft, position, size, rotation, 0.f);
 	case 'J':
-		return std::make_shared<BrickWall>(BrickWall::Type::TopRight, position, size, rotation);
+		return std::make_shared<BrickWall>(BrickWall::Type::TopRight, position, size, rotation, 0.f);
 	default:
 		std::cerr << "Unknown GameObject description: "sv << description << std::endl;
 		return nullptr;
