@@ -23,7 +23,7 @@ public:
 		  const float rotation,
 		  const float layer);
 	void Render() const override;
-	void Update(const uint64_t delta) override;
+	void Update(const double delta) override;
 private:
  	std::shared_ptr<RenderEngine::Sprite> sprite_;
 	std::array<glm::vec2, 4> block_offsets_;

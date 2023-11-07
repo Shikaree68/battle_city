@@ -32,7 +32,7 @@ void Game::Render(){
 	}
 }
 
-void Game::Update(const uint64_t delta){
+void Game::Update(const double delta){
 	if(level_){
 		level_->Update(delta);
 	}
@@ -67,7 +67,9 @@ bool Game::Initialize(){
 		std::cerr << "Can't find shader program: "sv << "sprite_shader"sv << std::endl;
 		return false;
 	}
-
+	level_ = std::make_unique<Level>(ResourceManager::GetLevels()[1]);
+	window_size_.x = static_cast<int>(level_->GetLevelWidth());
+	window_size_.y = static_cast<int>(level_->GetLevelHeight());
 	glm::mat4 projection_matrix = glm::ortho(0.f, static_cast<float>(window_size_.x),
 											0.f, static_cast<float>(window_size_.y),
 											-100.f, 100.f);
@@ -76,8 +78,15 @@ bool Game::Initialize(){
 	sprite_shader_program->SetInt("tex"s, 0);
 	sprite_shader_program->SetMatrix4("projection_matrix"s, projection_matrix);
 
-	tank_ = std::make_unique<Tank>(0.0000001f, glm::vec2(0), glm::vec2(16.f, 16.f), 0.f);
+	tank_ = std::make_unique<Tank>(0.05f, level_->GetPlayerRespawn_1(), glm::vec2(Level::BLOCK_SIZE, Level::BLOCK_SIZE), 0.f);
 
-	level_ = std::make_unique<Level>(ResourceManager::GetLevels()[1]);
 	return true;
+}
+
+size_t Game::GetCurrentLevelWidth() const {
+	return level_->GetLevelWidth();
+}
+
+size_t Game::GetCurrentLevelHeight() const {
+	return level_->GetLevelHeight();
 }

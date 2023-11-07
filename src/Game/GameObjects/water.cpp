@@ -30,6 +30,6 @@ void Water::Render() const {
 }
 
 
-void Water::Update(const uint64_t delta) {
+void Water::Update(const double delta) {
 	sprite_animator_.Update(delta);
 }

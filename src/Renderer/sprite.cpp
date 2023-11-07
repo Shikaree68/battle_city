@@ -103,7 +103,7 @@ void Sprite::InsertFrames(std::vector<FrameDescription> frames_descriptions) {
 	frames_decriptions_ = std::move(frames_descriptions);
 }
 
-uint64_t Sprite::GetFrameDuration(const size_t frame_id) const {
+double Sprite::GetFrameDuration(const size_t frame_id) const {
 	return frames_decriptions_ [frame_id].duration;
 }
 size_t Sprite::GetFramesCount() const {

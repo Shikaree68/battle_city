@@ -9,19 +9,15 @@ namespace RenderEngine{
 class Sprite;
 }
 
-class Eagle: public GameObject{
+class Border: public GameObject{
 public:
-	enum class State : uint8_t {
-		Alive = 0,
-		Dead
-	};
-	Eagle(const glm::vec2& position,
+
+	Border(const glm::vec2& position,
 		  const glm::vec2& size, 
 		  const float rotation,
 		  const float layer);
 	void Render() const override;
 	void Update(const double delta) override;
 private:
- 	std::array<std::shared_ptr<RenderEngine::Sprite>,2> sprites_;
-	State state_;
+ 	std::shared_ptr<RenderEngine::Sprite> sprite_;
 };

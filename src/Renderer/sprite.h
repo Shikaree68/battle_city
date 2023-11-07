@@ -18,13 +18,13 @@ class Sprite{
 public:
 
 	struct FrameDescription{
-		FrameDescription(const glm::vec2 left_bottom_UV_, glm::vec2 right_top_UV_, uint64_t duration_)
+		FrameDescription(const glm::vec2 left_bottom_UV_, glm::vec2 right_top_UV_, double duration_)
 			:left_bottom_UV(left_bottom_UV_)
 			, right_top_UV(right_top_UV_)
 			, duration(duration_){}
 		glm::vec2 left_bottom_UV;
 		glm::vec2 right_top_UV;
-		uint64_t duration;
+		double duration;
 	};
 	Sprite(std::shared_ptr<Texture2D> texture,
 		   const std::string& initial_sub_texture,
@@ -41,7 +41,7 @@ public:
 				const size_t frame_id = 0) const;
 
 	void InsertFrames(std::vector<FrameDescription> frames_descriptions);
-	uint64_t GetFrameDuration(const size_t frame_id) const;
+	double GetFrameDuration(const size_t frame_id) const;
 	size_t GetFramesCount() const;
 
 private:

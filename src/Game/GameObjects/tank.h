@@ -18,7 +18,7 @@ public:
 		Left,
 		Right,
 	};
-	Tank(const float velocity,
+	Tank(const double velocity,
 		 const glm::vec2& position, 
 		 const glm::vec2& size,
 		 const float layer);
@@ -26,7 +26,7 @@ public:
 	void Render() const override;
 	void SetOrientation(const Orientation orientation);
 	void Move(bool is_move);
-	void Update(const uint64_t delta) override;
+	void Update(const double delta) override;
 private:
 	Orientation orientation_;
 
@@ -40,6 +40,6 @@ private:
 	RenderEngine::SpriteAnimator sprite_animator_right_;
 
 	bool is_move_;
-	float velocity_;
+	double velocity_;
 	glm::vec2 move_offset_;
 };

@@ -24,17 +24,17 @@ void glfwWindowSizeCallback(GLFWwindow* window, int width, int height){
 	WINDOW_SIZE.x = width;
 	WINDOW_SIZE.y = height;
 
-	const float map_aspect_ratio = 13.f / 14.f;
+	const float level_aspect_ratio = static_cast<float>(game->GetCurrentLevelWidth()) / game->GetCurrentLevelHeight();	
 	uint32_t view_port_width = WINDOW_SIZE.x;
 	uint32_t view_port_height = WINDOW_SIZE.y;
 	uint32_t view_port_left_offset = 0;
 	uint32_t view_port_bottom_offset = 0;
 
-	if(WINDOW_SIZE.x * 1.f/ WINDOW_SIZE.y > map_aspect_ratio){
-		view_port_width = static_cast<uint32_t>(WINDOW_SIZE.y * map_aspect_ratio);
+	if(WINDOW_SIZE.x * 1.f/ WINDOW_SIZE.y > level_aspect_ratio){
+		view_port_width = static_cast<uint32_t>(WINDOW_SIZE.y * level_aspect_ratio);
 		view_port_left_offset = (WINDOW_SIZE.x - view_port_width) / 2;
 	} else{
-		view_port_height = static_cast<uint32_t>(WINDOW_SIZE.x / map_aspect_ratio);
+		view_port_height = static_cast<uint32_t>(WINDOW_SIZE.x / level_aspect_ratio);
 		view_port_bottom_offset = (WINDOW_SIZE.y - view_port_height) / 2;
 	}
 
@@ -86,6 +86,7 @@ int main(int argc, char** argv){
 	{
 		ResourceManager::SetExecutablePath(argv[0]);		
 		game->Initialize();
+		glfwSetWindowSize(p_window, static_cast<int>(3 * game->GetCurrentLevelWidth()), 3 * static_cast<int>(game->GetCurrentLevelHeight()));
 		auto last_time = std::chrono::high_resolution_clock::now();
 
 		/* Loop until the user closes the window */
@@ -94,7 +95,7 @@ int main(int argc, char** argv){
 			glfwPollEvents();
 
 			auto current_time = std::chrono::high_resolution_clock::now();
-			uint32_t duration = static_cast<uint32_t>(std::chrono::duration_cast<std::chrono::nanoseconds>(current_time - last_time).count());
+			double duration = std::chrono::duration<double, std::milli>(current_time - last_time).count();
 			last_time = current_time;
 			game->Update(duration);
 

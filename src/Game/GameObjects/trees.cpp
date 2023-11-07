@@ -29,4 +29,4 @@ void Trees::Render() const {
 }
 
 
-void Trees::Update(const uint64_t delta) {}
+void Trees::Update(const double delta) {}

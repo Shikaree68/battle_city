@@ -7,7 +7,7 @@ SpriteAnimator::SpriteAnimator(std::shared_ptr<Sprite> sprite)
 	, current_frame_duration_(sprite_->GetFrameDuration(0))
 	, current_animation_time_(0){}
 
-void SpriteAnimator::Update(const uint64_t delta){
+void SpriteAnimator::Update(const double delta){
 	current_animation_time_ += delta;
 
 	while(current_animation_time_ >= current_frame_duration_){

@@ -13,9 +13,11 @@ public:
 	~Game();
 
 	void Render();
-	void Update(const uint64_t delta);
+	void Update(const double delta);
 	void SetKey(const int key, int action);
 	bool Initialize();
+	size_t GetCurrentLevelWidth() const;
+	size_t GetCurrentLevelHeight() const;
 
 private:
 	std::array<bool, 349> keys_;

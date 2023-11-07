@@ -60,7 +60,9 @@ add_executable(${PROJECT_NAME}
     src/Game/GameObjects/water.cpp
     src/Game/GameObjects/water.h    
     src/Game/GameObjects/eagle.cpp
-    src/Game/GameObjects/eagle.h
+    src/Game/GameObjects/eagle.h 
+    src/Game/GameObjects/border.cpp
+    src/Game/GameObjects/border.h
 
     res/shaders/sprite_v.vert
     res/shaders/sprite_f.frag

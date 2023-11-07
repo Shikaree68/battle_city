@@ -193,7 +193,7 @@ bool ResourceManager::LoadJsonResources(const std::string& json_path){
 
 				for(const auto& current_frame : frames_array){
 					const std::string subtexture = current_frame["subtexture"].GetString();
-					const uint64_t duration = current_frame["duration"].GetUint64();
+					const double duration = current_frame["duration"].GetDouble();
 					const auto texture_atlas_ptr = GetTexture(texture_atlas);
 					const auto subtexture_ptr = texture_atlas_ptr->Getsubtexture(subtexture);
 					frames_descriptions.emplace_back(subtexture_ptr.left_bottom_UV, subtexture_ptr.right_top_UV, duration);

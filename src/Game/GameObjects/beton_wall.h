@@ -39,7 +39,7 @@ public:
 			  const float rotation,
 			  const float layer);
 	void Render() const override;
-	void Update(const uint64_t delta) override;
+	void Update(const double delta) override;
 private:
 	std::array<State, 4> current_state_;
  	std::shared_ptr<RenderEngine::Sprite> sprite_;

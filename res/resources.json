@@ -41,7 +41,7 @@
         "beton_wall",
         "trees",
         "ice",
-        "wall",
+        "border",
         "eagle",
         "bullet",
         "nothing"
@@ -212,11 +212,11 @@
       "frames": [
         {
           "subtexture": "type1_yellow_top1",
-          "duration": 500000000
+          "duration": 500
         },
         {
           "subtexture": "type1_yellow_top2",
-          "duration": 500000000
+          "duration": 500
         }
       ]
     },
@@ -228,11 +228,11 @@
       "frames": [
         {
           "subtexture": "type1_yellow_bottom1",
-          "duration": 500000000
+          "duration": 500
         },
         {
           "subtexture": "type1_yellow_bottom2",
-          "duration": 500000000
+          "duration": 500
         }
       ]
     },
@@ -244,11 +244,11 @@
       "frames": [
         {
           "subtexture": "type1_yellow_left1",
-          "duration": 500000000
+          "duration": 500
         },
         {
           "subtexture": "type1_yellow_left2",
-          "duration": 500000000
+          "duration": 500
         }
       ]
     },
@@ -260,11 +260,11 @@
       "frames": [
         {
           "subtexture": "type1_yellow_right1",
-          "duration": 500000000
+          "duration": 500
         },
         {
           "subtexture": "type1_yellow_right2",
-          "duration": 500000000
+          "duration": 500
         }
       ]
     },
@@ -277,15 +277,15 @@
       "frames": [
         {
           "subtexture": "water1",
-          "duration": 500000000
+          "duration": 500
         },
         {
           "subtexture": "water2",
-          "duration": 500000000
+          "duration": 500
         },
         {
           "subtexture": "water3",
-          "duration": 500000000
+          "duration": 500
         }
       ]
     },
@@ -308,10 +308,10 @@
       "initial_subtexture": "ice"
     },
     {
-      "name": "wall",
+      "name": "border",
       "texture_atlas": "map_texture_atlas_8x8",
       "shader": "sprite_shader",
-      "initial_subtexture": "wall"
+      "initial_subtexture": "border"
     },
     {
       "name": "bullet",
@@ -341,19 +341,19 @@
       "frames": [
         {
           "subtexture": "respawn1",
-          "duration": 500000000
+          "duration": 500
         },
         {
           "subtexture": "respawn2",
-          "duration": 500000000
+          "duration": 500
         },
         {
           "subtexture": "respawn3",
-          "duration": 500000000
+          "duration": 500
         },
         {
           "subtexture": "respawn4",
-          "duration": 500000000
+          "duration": 500
         }
       ]
     },
@@ -365,11 +365,11 @@
       "frames": [
         {
           "subtexture": "shield1",
-          "duration": 500000000
+          "duration": 500
         },
         {
           "subtexture": "shield1",
-          "duration": 500000000
+          "duration": 500
         }
       ]
     },
@@ -381,11 +381,11 @@
       "frames": [
         {
           "subtexture": "explosion1",
-          "duration": 500000000
+          "duration": 500
         },
         {
           "subtexture": "explosion2",
-          "duration": 500000000
+          "duration": 500
         }
       ]
     },
@@ -397,11 +397,11 @@
       "frames": [
         {
           "subtexture": "big_explosion1_top_left",
-          "duration": 500000000
+          "duration": 500
         },
         {
           "subtexture": "big_explosion2_top_left",
-          "duration": 500000000
+          "duration": 500
         }
       ]
     },
@@ -413,11 +413,11 @@
       "frames": [
         {
           "subtexture": "big_explosion1_top_right",
-          "duration": 500000000
+          "duration": 500
         },
         {
           "subtexture": "big_explosion2_top_right",
-          "duration": 500000000
+          "duration": 500
         }
       ]
     },
@@ -429,11 +429,11 @@
       "frames": [
         {
           "subtexture": "big_explosion1_bottom_left",
-          "duration": 500000000
+          "duration": 500
         },
         {
           "subtexture": "big_explosion2_bottom_left",
-          "duration": 500000000
+          "duration": 500
         }
       ]
     },
@@ -445,11 +445,11 @@
       "frames": [
         {
           "subtexture": "big_explosion1_bottom_right",
-          "duration": 500000000
+          "duration": 500
         },
         {
           "subtexture": "big_explosion2_bottom_right",
-          "duration": 500000000
+          "duration": 500
         }
       ]
     },
@@ -513,12 +513,12 @@
         "D4D4D4D4D4D4D",
         "D4D4D3D3D4D4D",
         "D4D4DH1GDDDDD",
-        "DDDDD0E2DDDDD"
+        "DDDDK0E2DDDDD"
       ]
     },
     {
       "description": [
-        "DDDDDDDDDDDDD",
+        "MDDDDDNDDDDDO",
         "D00D11D22D33D",
         "D4D4D4D4D4D4D",
         "D5D5D5D5D5D5D",
@@ -531,7 +531,29 @@
         "D4CCD4CCD4D4D",
         "DGG4GGDHH4HHD",
         "DJDJDH1GDJDJD",
-        "DDDDD0E2DDDDD"
+        "DDDDK0E2LDDDD"
+      ]
+    },
+    {
+      "description": [
+        "DDDDDDDDDDDDDDDDDDDDDDDDDDDD",
+        "D00D11D22D33D2D33D2D33D2D33D",
+        "D4D4D4D4D4D4DD4D4DD4D4DD4D4D",
+        "D5D5D5D5D5D5DD5D5DD5D5DD5D5D",
+        "D6D6D696D6D6DD6D6DD6D6DD6D6D",
+        "D6D6D696D6D6DD6D6DD6D6DD6D6D",
+        "D6D6D696D6D6DD6D6DD6D6DD6D6D",
+        "D7D7D7D7D7D7DD7D7DD7D7DD7D7D",
+        "D8D8D8D8D8D8DD8D8DD8D8DD8D8D",
+        "9D19D9D9D19D1D19D1D19D1D19D1",
+        "9D19D9D9D19D1D19D1D19D1D19D1",
+        "9D19D9D9D19D1D19D1D19D1D19D1",
+        "6DB3DADAD3AD6D3AD6D3AD6D3AD6",
+        "D1DBD4B4DBD1DDBD1DDBD1DDBD1D",
+        "D4CCD4CCD4D4DD4D4DD4D4DD4D4D",
+        "DGG4GGDHH4HHDH4HHDH4HHDH4HHD",
+        "DJDJDH1GDJDJDDJDJDDJDJDDJDJD",
+        "DDDDD0E2DDDDDDDDDDDDDDDDDDDD"
       ]
     }
   ]

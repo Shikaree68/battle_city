@@ -85,4 +85,4 @@ void BrickWall::Render() const {
 }
 
 
-void BrickWall::Update(const uint64_t delta) {}
+void BrickWall::Update(const double delta) {}

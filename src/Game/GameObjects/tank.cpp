@@ -4,7 +4,7 @@
 #include "../../Renderer/sprite.h"
 
 using namespace std::literals;
-Tank::Tank(const float velocity,
+Tank::Tank(const double velocity,
 		   const glm::vec2& position,
 		   const glm::vec2& size,
 		   const float layer)
@@ -71,9 +71,9 @@ void Tank::Move(bool is_move){
 	is_move_ = is_move;
 }
 
-void Tank::Update(const uint64_t delta){
+void Tank::Update(const double delta){
 	if(is_move_){
-		position_ += delta * velocity_ * move_offset_;
+		position_ += static_cast<float>(delta * velocity_) * move_offset_;
 		switch(orientation_){
 		case Tank::Orientation::Top:
 			sprite_animator_top_.Update(delta);

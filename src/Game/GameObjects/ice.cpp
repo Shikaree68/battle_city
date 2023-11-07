@@ -29,4 +29,4 @@ void Ice::Render() const {
 }
 
 
-void Ice::Update(const uint64_t delta) {}
+void Ice::Update(const double delta) {}
