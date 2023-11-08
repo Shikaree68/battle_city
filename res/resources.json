@@ -334,26 +334,34 @@
       "initial_subtexture": "eagle_dead"
     },
     {
-      "name": "respawn",
+      "name": "tank_respawn",
       "texture_atlas": "map_texture_atlas",
       "shader": "sprite_shader",
       "initial_subtexture": "respawn1",
       "frames": [
         {
           "subtexture": "respawn1",
-          "duration": 500
+          "duration": 100
         },
         {
           "subtexture": "respawn2",
-          "duration": 500
+          "duration": 100
         },
         {
           "subtexture": "respawn3",
-          "duration": 500
+          "duration": 100
         },
         {
           "subtexture": "respawn4",
-          "duration": 500
+          "duration": 100
+        },
+        {
+          "subtexture": "respawn3",
+          "duration": 100
+        },
+        {
+          "subtexture": "respawn2",
+          "duration": 100
         }
       ]
     },
@@ -365,11 +373,11 @@
       "frames": [
         {
           "subtexture": "shield1",
-          "duration": 500
+          "duration": 50
         },
         {
-          "subtexture": "shield1",
-          "duration": 500
+          "subtexture": "shield2",
+          "duration": 50
         }
       ]
     },

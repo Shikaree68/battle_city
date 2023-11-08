@@ -18,12 +18,32 @@ Tank::Tank(const double velocity,
 	, sprite_animator_bottom_(sprite_bottom_)
 	, sprite_animator_left_(sprite_left_)
 	, sprite_animator_right_(sprite_right_)
+	, sprite_respawn_(ResourceManager::GetSprite("tank_respawn"s))
+	, sprite_animator_respawn_(sprite_respawn_)
+	, sprite_shield_(ResourceManager::GetSprite("shield"s))
+	, sprite_animator_shield_(sprite_shield_)
 	, is_move_(false)
 	, velocity_(velocity)
-	, move_offset_(glm::vec2(0.f, 1.f)){}
+	, move_offset_(glm::vec2(0.f, 1.f))
+	, is_spawning_(true)
+	, has_shield_(false) {
+	timer_respawn_.SetCallback([&]() {
+		is_spawning_ = false;
+		has_shield_ = true;
+		timer_shield_.Start(2000);
+	});
+	timer_respawn_.Start(1500);
+	timer_shield_.SetCallback([&]() {
+		has_shield_ = false;
+	});
+}
 
-void Tank::Render() const{
-	switch(orientation_){
+void Tank::Render() const {
+	if(is_spawning_) {
+		sprite_respawn_->Render(position_, size_, rotation_, layer_, sprite_animator_respawn_.GetCurrentFrame());
+		return;
+	}
+	switch(orientation_) {
 	case Tank::Orientation::Top:
 		sprite_top_->Render(position_, size_, rotation_, layer_, sprite_animator_top_.GetCurrentFrame());
 		break;
@@ -37,15 +57,18 @@ void Tank::Render() const{
 		sprite_right_->Render(position_, size_, rotation_, layer_, sprite_animator_right_.GetCurrentFrame());
 		break;
 	}
+	if(has_shield_) {
+		sprite_shield_->Render(position_, size_, rotation_, layer_, sprite_animator_shield_.GetCurrentFrame());
+	}
 }
 
-void Tank::SetOrientation(const Orientation orientation){
-	if(orientation_ == orientation){
+void Tank::SetOrientation(const Orientation orientation) {
+	if(orientation_ == orientation) {
 		return;
 	}
 
 	orientation_ = orientation;
-	switch(orientation_){
+	switch(orientation_) {
 	case Tank::Orientation::Top:
 		move_offset_.x = 0.f;
 		move_offset_.y = 1.f;
@@ -67,14 +90,25 @@ void Tank::SetOrientation(const Orientation orientation){
 	}
 }
 
-void Tank::Move(bool is_move){
+void Tank::Move(bool is_move) {
 	is_move_ = is_move;
 }
 
-void Tank::Update(const double delta){
-	if(is_move_){
+void Tank::Update(const double delta) {
+	if(is_spawning_) {
+		sprite_animator_respawn_.Update(delta);
+		timer_respawn_.Update(delta);
+		return;
+	}
+
+	if(has_shield_) {
+		sprite_animator_shield_.Update(delta);
+		timer_shield_.Update(delta);
+	}
+
+	if(is_move_) {
 		position_ += static_cast<float>(delta * velocity_) * move_offset_;
-		switch(orientation_){
+		switch(orientation_) {
 		case Tank::Orientation::Top:
 			sprite_animator_top_.Update(delta);
 			break;

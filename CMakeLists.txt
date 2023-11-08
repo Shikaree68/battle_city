@@ -38,8 +38,11 @@ add_executable(${PROJECT_NAME}
     src/Renderer/renderer.h
 
     src/Resources/resource_manager.cpp
-    src/Resources/resource_manager.h
     src/Resources/stb_image.h
+    src/Resources/resource_manager.h
+    
+    src/System/timer.h
+    src/System/timer.cpp
 
     src/Game/game.cpp
     src/Game/game.h

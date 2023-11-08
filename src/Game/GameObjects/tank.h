@@ -5,6 +5,7 @@
 
 #include "game_object_interface.h"
 #include "../../Renderer/sprite_animator.h"
+#include "../../System/timer.h"
 
 namespace RenderEngine{
 class Sprite;
@@ -39,7 +40,18 @@ private:
 	RenderEngine::SpriteAnimator sprite_animator_left_;
 	RenderEngine::SpriteAnimator sprite_animator_right_;
 
+	std::shared_ptr<RenderEngine::Sprite> sprite_respawn_;
+	RenderEngine::SpriteAnimator sprite_animator_respawn_;
+	
+	std::shared_ptr<RenderEngine::Sprite> sprite_shield_;
+	RenderEngine::SpriteAnimator sprite_animator_shield_;
+
 	bool is_move_;
 	double velocity_;
 	glm::vec2 move_offset_;
+	bool is_spawning_;
+	bool has_shield_;
+
+	Timer timer_respawn_;
+	Timer timer_shield_;
 };
