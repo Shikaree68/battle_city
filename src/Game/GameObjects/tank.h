@@ -19,15 +19,18 @@ public:
 		Left,
 		Right,
 	};
-	Tank(const double velocity,
+	Tank(const double max_velocity,
 		 const glm::vec2& position, 
 		 const glm::vec2& size,
 		 const float layer);
 
 	void Render() const override;
 	void SetOrientation(const Orientation orientation);
-	void Move(bool is_move);
 	void Update(const double delta) override;
+	double GetMaxVelocity() const {
+		return max_velocity_;
+	};
+	void SetVelocity(const double velocity) override;
 private:
 	Orientation orientation_;
 
@@ -46,9 +49,7 @@ private:
 	std::shared_ptr<RenderEngine::Sprite> sprite_shield_;
 	RenderEngine::SpriteAnimator sprite_animator_shield_;
 
-	bool is_move_;
-	double velocity_;
-	glm::vec2 move_offset_;
+	double max_velocity_;
 	bool is_spawning_;
 	bool has_shield_;
 

@@ -29,6 +29,6 @@ private:
 
 	GameState current_state_;
 	glm::ivec2 window_size_;
-	std::unique_ptr<Tank> tank_;
-	std::unique_ptr<Level> level_;
+	std::shared_ptr<Tank> tank_;
+	std::shared_ptr<Level> level_;
 };

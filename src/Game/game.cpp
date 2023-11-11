@@ -5,6 +5,8 @@
 #include "../Resources/resource_manager.h"
 #include "../Renderer/texture_2D.h"
 #include "../Renderer/sprite.h"
+#include "../Physics/physics_engine.h"
+
 #include "level.h"
 
 #include <glm/gtc/matrix_transform.hpp>
@@ -39,18 +41,18 @@ void Game::Update(const double delta){
 	if(tank_){
 		if(keys_[GLFW_KEY_W]){
 			tank_->SetOrientation(Tank::Orientation::Top);
-			tank_->Move(true);
+			tank_->SetVelocity(tank_->GetMaxVelocity());
 		} else if(keys_[GLFW_KEY_A]){
 			tank_->SetOrientation(Tank::Orientation::Left);
-			tank_->Move(true);
+			tank_->SetVelocity(tank_->GetMaxVelocity());
 		} else if(keys_[GLFW_KEY_D]){
 			tank_->SetOrientation(Tank::Orientation::Right);
-			tank_->Move(true);
+			tank_->SetVelocity(tank_->GetMaxVelocity());
 		} else if(keys_[GLFW_KEY_S]){
 			tank_->SetOrientation(Tank::Orientation::Bottom);
-			tank_->Move(true);
+			tank_->SetVelocity(tank_->GetMaxVelocity());
 		} else{
-			tank_->Move(false);
+			tank_->SetVelocity(0);
 		}
 		tank_->Update(delta);
 	}
@@ -67,7 +69,7 @@ bool Game::Initialize(){
 		std::cerr << "Can't find shader program: "sv << "sprite_shader"sv << std::endl;
 		return false;
 	}
-	level_ = std::make_unique<Level>(ResourceManager::GetLevels()[1]);
+	level_ = std::make_shared<Level>(ResourceManager::GetLevels()[1]);
 	window_size_.x = static_cast<int>(level_->GetLevelWidth());
 	window_size_.y = static_cast<int>(level_->GetLevelHeight());
 	glm::mat4 projection_matrix = glm::ortho(0.f, static_cast<float>(window_size_.x),
@@ -78,8 +80,8 @@ bool Game::Initialize(){
 	sprite_shader_program->SetInt("tex"s, 0);
 	sprite_shader_program->SetMatrix4("projection_matrix"s, projection_matrix);
 
-	tank_ = std::make_unique<Tank>(0.05f, level_->GetPlayerRespawn_1(), glm::vec2(Level::BLOCK_SIZE, Level::BLOCK_SIZE), 0.f);
-
+	tank_ = std::make_shared<Tank>(0.05f, level_->GetPlayerRespawn_1(), glm::vec2(Level::BLOCK_SIZE, Level::BLOCK_SIZE), 0.f);
+	PhysicsEngine::AddDynamicGameObject(tank_);
 	return true;
 }
 

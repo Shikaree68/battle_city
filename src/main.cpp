@@ -8,6 +8,7 @@
 #include "Game/game.h"
 #include "Resources/resource_manager.h"
 #include "Renderer/renderer.h"
+#include "Physics/physics_engine.h"
 
 using namespace std::literals;
 
@@ -84,7 +85,8 @@ int main(int argc, char** argv){
 	RenderEngine::Renderer::SetDepthTest(true);
 
 	{
-		ResourceManager::SetExecutablePath(argv[0]);		
+		ResourceManager::SetExecutablePath(argv[0]);	
+		PhysicsEngine::Initialize();
 		game->Initialize();
 		glfwSetWindowSize(p_window, static_cast<int>(3 * game->GetCurrentLevelWidth()), 3 * static_cast<int>(game->GetCurrentLevelHeight()));
 		auto last_time = std::chrono::high_resolution_clock::now();
@@ -98,7 +100,8 @@ int main(int argc, char** argv){
 			double duration = std::chrono::duration<double, std::milli>(current_time - last_time).count();
 			last_time = current_time;
 			game->Update(duration);
-
+			
+			PhysicsEngine::Update(duration);
 			/* Render here */
 			RenderEngine::Renderer::Clear();
 

@@ -42,7 +42,10 @@ add_executable(${PROJECT_NAME}
     src/Resources/resource_manager.h
     
     src/System/timer.h
-    src/System/timer.cpp
+    src/System/timer.cpp  
+    
+    src/Physics/physics_engine.h
+    src/Physics/physics_engine.cpp
 
     src/Game/game.cpp
     src/Game/game.h
