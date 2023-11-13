@@ -69,9 +69,11 @@ bool Game::Initialize(){
 		std::cerr << "Can't find shader program: "sv << "sprite_shader"sv << std::endl;
 		return false;
 	}
-	level_ = std::make_shared<Level>(ResourceManager::GetLevels()[1]);
+	level_ = std::make_shared<Level>(ResourceManager::GetLevels()[0]);
 	window_size_.x = static_cast<int>(level_->GetLevelWidth());
 	window_size_.y = static_cast<int>(level_->GetLevelHeight());
+	Physics::PhysicsEngine::SetCurrentLevel(level_);
+
 	glm::mat4 projection_matrix = glm::ortho(0.f, static_cast<float>(window_size_.x),
 											0.f, static_cast<float>(window_size_.y),
 											-100.f, 100.f);
@@ -81,7 +83,7 @@ bool Game::Initialize(){
 	sprite_shader_program->SetMatrix4("projection_matrix"s, projection_matrix);
 
 	tank_ = std::make_shared<Tank>(0.05f, level_->GetPlayerRespawn_1(), glm::vec2(Level::BLOCK_SIZE, Level::BLOCK_SIZE), 0.f);
-	PhysicsEngine::AddDynamicGameObject(tank_);
+	Physics::PhysicsEngine::AddDynamicGameObject(tank_);
 	return true;
 }
 

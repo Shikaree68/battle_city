@@ -25,6 +25,7 @@ Tank::Tank(const double max_velocity,
 	, max_velocity_(max_velocity)
 	, is_spawning_(true)
 	, has_shield_(false) {
+
 	timer_respawn_.SetCallback([&]() {
 		is_spawning_ = false;
 		has_shield_ = true;
@@ -34,6 +35,7 @@ Tank::Tank(const double max_velocity,
 	timer_shield_.SetCallback([&]() {
 		has_shield_ = false;
 	});
+	colliders_.emplace_back(glm::vec2(0), size_);
 }
 
 void Tank::Render() const {

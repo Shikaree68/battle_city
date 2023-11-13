@@ -15,7 +15,9 @@ Water::Water(const glm::vec2& position,
 	, block_offsets_ {glm::vec2(0, size_.y / 2.f),
 					  glm::vec2(size_.x / 2.f, size_.y / 2.f),
 					  glm::vec2(0,0),
-					  glm::vec2(size_.x / 2.f, 0)} {}
+					  glm::vec2(size_.x / 2.f, 0)} {
+	colliders_.emplace_back(glm::vec2(0), size_);
+}
 
 
 void Water::RenderBlock(const Water::Location location) const {

@@ -23,34 +23,43 @@ BetonWall::BetonWall(const Type beton_wall_type,
 	switch(beton_wall_type) {
 	case Type::All:
 		current_state_.fill(State::All);
+		colliders_.emplace_back(glm::vec2(0), size_);
 		break;
 	case Type::Top:
 		current_state_[static_cast<size_t>(Location::TopLeft)] = State::All;
 		current_state_[static_cast<size_t>(Location::TopRight)] = State::All;
+		colliders_.emplace_back(glm::vec2(0, size_.y / 2), size_);
 		break;
 	case Type::Bottom:
 		current_state_[static_cast<size_t>(Location::BottomLeft)] = State::All;
 		current_state_[static_cast<size_t>(Location::BottomRight)] = State::All;
+		colliders_.emplace_back(glm::vec2(0), glm::vec2(size_.x, size_.y / 2));
 		break;
 	case Type::Left:
 		current_state_[static_cast<size_t>(Location::TopLeft)] = State::All;
 		current_state_[static_cast<size_t>(Location::BottomLeft)] = State::All;
+		colliders_.emplace_back(glm::vec2(0), glm::vec2(size_.x / 2, size_.y));
 		break;
 	case Type::Right:
 		current_state_[static_cast<size_t>(Location::TopRight)] = State::All;
 		current_state_[static_cast<size_t>(Location::BottomRight)] = State::All;
+		colliders_.emplace_back(glm::vec2(size_.x / 2, 0), size_);
 		break;
 	case Type::TopLeft:
 		current_state_[static_cast<size_t>(Location::TopLeft)] = State::All;
+		colliders_.emplace_back(glm::vec2(0, size_.y / 2), glm::vec2(size_.x / 2, size_.y));
 		break;
 	case Type::TopRight:
 		current_state_[static_cast<size_t>(Location::TopRight)] = State::All;
+		colliders_.emplace_back(glm::vec2(size_.x / 2, size_.y / 2), size_);
 		break;
 	case Type::BottomLeft:
 		current_state_[static_cast<size_t>(Location::BottomLeft)] = State::All;
+		colliders_.emplace_back(glm::vec2(0), glm::vec2(size_.x / 2, size_.y / 2));
 		break;
 	case Type::BottomRight:
 		current_state_[static_cast<size_t>(Location::BottomRight)] = State::All;
+		colliders_.emplace_back(glm::vec2(size_.x / 2, 0), glm::vec2(size_.x, size_.y / 2));
 		break;
 	}
 }

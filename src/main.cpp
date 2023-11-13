@@ -86,7 +86,7 @@ int main(int argc, char** argv){
 
 	{
 		ResourceManager::SetExecutablePath(argv[0]);	
-		PhysicsEngine::Initialize();
+		Physics::PhysicsEngine::Initialize();
 		game->Initialize();
 		glfwSetWindowSize(p_window, static_cast<int>(3 * game->GetCurrentLevelWidth()), 3 * static_cast<int>(game->GetCurrentLevelHeight()));
 		auto last_time = std::chrono::high_resolution_clock::now();
@@ -101,7 +101,7 @@ int main(int argc, char** argv){
 			last_time = current_time;
 			game->Update(duration);
 			
-			PhysicsEngine::Update(duration);
+			Physics::PhysicsEngine::Update(duration);
 			/* Render here */
 			RenderEngine::Renderer::Clear();
 

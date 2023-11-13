@@ -15,8 +15,8 @@ public:
 	Level(const std::vector<std::string>& level_description);
 	void Render() const;
 	void Update(const double delta);
-	size_t GetLevelWidth() const;
-	size_t GetLevelHeight() const;
+	uint64_t GetLevelWidth() const;
+	uint64_t GetLevelHeight() const;
 
 	const glm::ivec2& GetPlayerRespawn_1() const {
 		return player_respawn_1_;
@@ -34,9 +34,15 @@ public:
 		return enemy_respawn_3_;
 	};
 
+	std::vector<std::shared_ptr<GameObject>> GetObjectsInArea(const glm::vec2 bottom_left, 
+															  const glm::vec2 top_right) const;
+
 private:
-	uint64_t width_;
-	uint64_t height_;
+	uint32_t width_in_blocks_;
+	uint32_t height_in_blocks_;
+	uint64_t width_in_pixels_;
+	uint64_t height_in_pixels_;
+
 
 	glm::ivec2 player_respawn_1_;
 	glm::ivec2 player_respawn_2_;

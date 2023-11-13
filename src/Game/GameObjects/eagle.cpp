@@ -12,7 +12,9 @@ Eagle::Eagle(const glm::vec2& position,
 	: GameObject(position, size, rotation,layer)
 	, sprites_ {ResourceManager::GetSprite("eagle_alive"s),
 	ResourceManager::GetSprite("eagle_dead"s)}
-	, state_(State::Alive) {}
+	, state_(State::Alive) {
+	colliders_.emplace_back(glm::vec2(0), size_);
+}
 
 void Eagle::Render() const {
 	sprites_[static_cast<size_t>(state_)]->Render(position_, size_, rotation_,layer_);
