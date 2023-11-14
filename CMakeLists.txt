@@ -54,7 +54,9 @@ add_executable(${PROJECT_NAME}
     src/Game/GameObjects/game_object_interface.cpp
     src/Game/GameObjects/game_object_interface.h
     src/Game/GameObjects/tank.cpp
-    src/Game/GameObjects/tank.h   
+    src/Game/GameObjects/tank.h      
+    src/Game/GameObjects/bullet.cpp
+    src/Game/GameObjects/bullet.h   
     src/Game/GameObjects/brick_wall.cpp
     src/Game/GameObjects/brick_wall.h
     src/Game/GameObjects/beton_wall.cpp

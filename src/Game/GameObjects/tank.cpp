@@ -2,14 +2,18 @@
 
 #include "../../Resources/resource_manager.h"
 #include "../../Renderer/sprite.h"
+#include "bullet.h"
+#include "../../Physics/physics_engine.h"
+
 
 using namespace std::literals;
 Tank::Tank(const double max_velocity,
 		   const glm::vec2& position,
 		   const glm::vec2& size,
 		   const float layer)
-	: GameObject(position, size, 0.f, layer)
+	: GameObject(GameObject::Type::Tank, position, size, 0.f, layer)
 	, orientation_(Orientation::Top)
+	, bullet_(std::make_shared<Bullet>(0.1, position_ + size_ / 4.f, size_ / 2.f, layer))
 	, sprite_top_(ResourceManager::GetSprite("tank_top_state"s))
 	, sprite_bottom_(ResourceManager::GetSprite("tank_bottom_state"s))
 	, sprite_left_(ResourceManager::GetSprite("tank_left_state"s))
@@ -36,29 +40,33 @@ Tank::Tank(const double max_velocity,
 		has_shield_ = false;
 	});
 	colliders_.emplace_back(glm::vec2(0), size_);
+	Physics::PhysicsEngine::AddDynamicGameObject(bullet_);
 }
 
 void Tank::Render() const {
 	if(is_spawning_) {
 		sprite_respawn_->Render(position_, size_, rotation_, layer_, sprite_animator_respawn_.GetCurrentFrame());
-		return;
+	} else {
+		switch(orientation_) {
+		case Tank::Orientation::Top:
+			sprite_top_->Render(position_, size_, rotation_, layer_, sprite_animator_top_.GetCurrentFrame());
+			break;
+		case Tank::Orientation::Bottom:
+			sprite_bottom_->Render(position_, size_, rotation_, layer_, sprite_animator_bottom_.GetCurrentFrame());
+			break;
+		case Tank::Orientation::Left:
+			sprite_left_->Render(position_, size_, rotation_, layer_, sprite_animator_left_.GetCurrentFrame());
+			break;
+		case Tank::Orientation::Right:
+			sprite_right_->Render(position_, size_, rotation_, layer_, sprite_animator_right_.GetCurrentFrame());
+			break;
+		}
+		if(has_shield_) {
+			sprite_shield_->Render(position_, size_, rotation_, layer_ + 0.1f, sprite_animator_shield_.GetCurrentFrame());
+		}
 	}
-	switch(orientation_) {
-	case Tank::Orientation::Top:
-		sprite_top_->Render(position_, size_, rotation_, layer_, sprite_animator_top_.GetCurrentFrame());
-		break;
-	case Tank::Orientation::Bottom:
-		sprite_bottom_->Render(position_, size_, rotation_, layer_, sprite_animator_bottom_.GetCurrentFrame());
-		break;
-	case Tank::Orientation::Left:
-		sprite_left_->Render(position_, size_, rotation_, layer_, sprite_animator_left_.GetCurrentFrame());
-		break;
-	case Tank::Orientation::Right:
-		sprite_right_->Render(position_, size_, rotation_, layer_, sprite_animator_right_.GetCurrentFrame());
-		break;
-	}
-	if(has_shield_) {
-		sprite_shield_->Render(position_, size_, rotation_, layer_ + 0.1f, sprite_animator_shield_.GetCurrentFrame());
+	if(bullet_->IsActive()) {
+		bullet_->Render();
 	}
 }
 
@@ -84,8 +92,6 @@ void Tank::SetOrientation(const Orientation orientation) {
 	case Tank::Orientation::Right:
 		direction_.x = 1.f;
 		direction_.y = 0.f;
-		break;
-	default:
 		break;
 	}
 }
@@ -123,6 +129,13 @@ void Tank::Update(const double delta) {
 void Tank::SetVelocity(const double velocity) {
 	if(!is_spawning_) {
 		velocity_ = velocity;
+	}
+}
+
+void Tank::Fire() {
+	if(!bullet_->IsActive()) {
+		static const auto size_quart = size_ / 4.f;
+		bullet_->Fire(position_ + size_quart + size_quart * direction_, direction_);
 	}
 }
 

@@ -10,7 +10,7 @@ BetonWall::BetonWall(const Type beton_wall_type,
 					 const glm::vec2& size,
 					 const float rotation,
 					 const float layer)
-	: GameObject(position, size, rotation, layer)
+	: GameObject(GameObject::Type::BetonWall, position, size, rotation, layer)
 	, current_state_ {State::Destroyed,
 					  State::Destroyed,
 					  State::Destroyed,

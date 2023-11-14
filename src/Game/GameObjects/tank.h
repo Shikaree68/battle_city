@@ -10,6 +10,7 @@
 namespace RenderEngine{
 class Sprite;
 }
+class Bullet;
 
 class Tank : public GameObject{
 public:
@@ -31,9 +32,10 @@ public:
 		return max_velocity_;
 	};
 	void SetVelocity(const double velocity) override;
+	void Fire();
 private:
 	Orientation orientation_;
-
+	std::shared_ptr<Bullet> bullet_;
 	std::shared_ptr<RenderEngine::Sprite> sprite_top_;
 	std::shared_ptr<RenderEngine::Sprite> sprite_bottom_;
 	std::shared_ptr<RenderEngine::Sprite> sprite_left_;

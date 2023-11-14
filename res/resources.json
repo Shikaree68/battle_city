@@ -42,8 +42,10 @@
         "trees",
         "ice",
         "border",
-        "eagle",
-        "bullet",
+        "bullet_top",
+        "bullet_bottom",
+        "bullet_left",
+        "bullet_right",
         "nothing"
       ]
     },
@@ -314,10 +316,28 @@
       "initial_subtexture": "border"
     },
     {
-      "name": "bullet",
+      "name": "bullet_top",
       "texture_atlas": "map_texture_atlas_8x8",
       "shader": "sprite_shader",
-      "initial_subtexture": "bullet"
+      "initial_subtexture": "bullet_top"
+    },
+    {
+      "name": "bullet_bottom",
+      "texture_atlas": "map_texture_atlas_8x8",
+      "shader": "sprite_shader",
+      "initial_subtexture": "bullet_bottom"
+    },
+    {
+      "name": "bullet_left",
+      "texture_atlas": "map_texture_atlas_8x8",
+      "shader": "sprite_shader",
+      "initial_subtexture": "bullet_left"
+    },
+    {
+      "name": "bullet_right",
+      "texture_atlas": "map_texture_atlas_8x8",
+      "shader": "sprite_shader",
+      "initial_subtexture": "bullet_right"
     },
 
 

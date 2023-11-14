@@ -24,6 +24,7 @@ public:
 		  const float layer);
 	void Render() const override;
 	void Update(const double delta) override;
+	bool CheckCanCollide(const GameObject::Type type) const override;
 private:
  	std::shared_ptr<RenderEngine::Sprite> sprite_;
 	std::array<glm::vec2, 4> block_offsets_;

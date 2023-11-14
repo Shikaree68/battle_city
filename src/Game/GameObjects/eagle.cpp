@@ -9,7 +9,7 @@ Eagle::Eagle(const glm::vec2& position,
 			 const glm::vec2& size,
 			 const float rotation,
 			 const float layer)
-	: GameObject(position, size, rotation,layer)
+	: GameObject(GameObject::Type::Eagle, position, size, rotation,layer)
 	, sprites_ {ResourceManager::GetSprite("eagle_alive"s),
 	ResourceManager::GetSprite("eagle_dead"s)}
 	, state_(State::Alive) {

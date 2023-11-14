@@ -34,9 +34,10 @@ void PhysicsEngine::Update(const double delta) {
 
 			for(const auto& current_near_object : near_objects) {
 				const auto& colliders_to_check = current_near_object->GetColliders();
-				if(!colliders_to_check.empty()) {
+				if(current_near_object->CheckCanCollide(current_object->GetType()) && !colliders_to_check.empty()) {
 					if(CheckIntersection(colliders, new_position, colliders_to_check, current_near_object->GetPosition())) {
 						has_collision = true;
+						current_near_object->DoInCollide();
 						break;
 					}
 				}
@@ -52,6 +53,7 @@ void PhysicsEngine::Update(const double delta) {
 					current_object->GetPosition() = glm::vec2(current_object->GetPosition().x,
 															  static_cast<uint32_t>(current_object->GetPosition().y / 8.f + 0.5f) * 8.f);
 				}
+				current_object->DoInCollide();
 			}
 
 		}
@@ -74,21 +76,20 @@ bool PhysicsEngine::CheckIntersection(const std::vector<AABB>& colliders1, const
 			const glm::vec2 collider2_top_right_world = collider2.top_right + position2;
 
 			if(collider1_bottom_left_world.x >= collider2_top_right_world.x) {
-				return false;
+				 continue;
 			}
 			if(collider1_top_right_world.x <= collider2_bottom_left_world.x) {
-				return false;
+				continue;
 			}
-
 			if(collider1_bottom_left_world.y >= collider2_top_right_world.y) {
-				return false;
+				continue;
 			}
-
 			if(collider1_top_right_world.y <= collider2_bottom_left_world.y) {
-				return false;
+				continue;
 			}
 			return true;
 		}
 	}
+	return false;
 }
 }

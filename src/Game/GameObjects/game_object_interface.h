@@ -5,37 +5,42 @@
 
 class GameObject {
 public:
-	GameObject(const glm::vec2& position, const glm::vec2& size, const float rotation, const float layer);
-
+	enum class Type {
+		BetonWall,
+		Border,
+		BrickWall,
+		Bullet,
+		Eagle,
+		Ice,
+		Tank,
+		Trees,
+		Water,
+		Unknown
+	};
+	GameObject(const Type type, const glm::vec2& position,
+			   const glm::vec2& size, const float rotation, const float layer);
 	virtual void Render() const = 0;
 	virtual void Update(const double delta) = 0;
-	virtual glm::vec2& GetPosition() {
-		return position_;
-	}
-	virtual glm::vec2& GetDirection() {
-		return direction_;
-	}
-	virtual double GetVelocity() {
-		return velocity_;
-	}
+	virtual glm::vec2& GetPosition();
+	virtual glm::vec2& GetDirection();
+	virtual double GetVelocity();
 	virtual void SetVelocity(const double velocity);
+	virtual bool CheckCanCollide(const Type type) const;
+	virtual void DoInCollide();
 
-	const glm::vec2& GetSize() const {
-		return size_;
-	}
-	const std::vector<Physics::AABB>& GetColliders() const {
-		return colliders_;
-	}
+	Type GetType() const;
+	const glm::vec2& GetSize() const;
+	const std::vector<Physics::AABB>& GetColliders() const;
 
 	virtual ~GameObject();
 protected:
 	glm::vec2 position_;
-	glm::vec2 size_;
+	const glm::vec2 size_;
 	float rotation_;
 	float layer_;
+	Type type_;
 
 	glm::vec2 direction_;
 	double velocity_;
-
 	std::vector<Physics::AABB> colliders_;
 };

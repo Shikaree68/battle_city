@@ -9,7 +9,7 @@ Water::Water(const glm::vec2& position,
 			 const glm::vec2& size,
 			 const float rotation,
 			 const float layer)
-	: GameObject(position, size, rotation, layer)
+	: GameObject(GameObject::Type::Water, position, size, rotation, layer)
 	, sprite_(ResourceManager::GetSprite("water"s))
 	, sprite_animator_(sprite_)
 	, block_offsets_ {glm::vec2(0, size_.y / 2.f),
@@ -34,4 +34,8 @@ void Water::Render() const {
 
 void Water::Update(const double delta) {
 	sprite_animator_.Update(delta);
+}
+
+bool Water::CheckCanCollide(const GameObject::Type type) const {
+	return type != GameObject::Type::Bullet;
 }
