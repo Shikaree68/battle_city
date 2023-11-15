@@ -30,7 +30,7 @@ Sprite::Sprite(std::shared_ptr<Texture2D> texture,
 		1.f, 0.f,
 	};
 
-	auto& sub_texture { texture_->Getsubtexture(initial_sub_texture) };
+	auto& sub_texture {texture_->Getsubtexture(initial_sub_texture)};
 
 	const GLfloat texture_coords[] {
 		// U  V
@@ -62,14 +62,14 @@ Sprite::Sprite(std::shared_ptr<Texture2D> texture,
 }
 Sprite::~Sprite() {}
 
-void Sprite::Render(const glm::vec2& position, 
-					const glm::vec2& size, 
-					const float rotation, 
-					const float layer, 
+void Sprite::Render(const glm::vec2& position,
+					const glm::vec2& size,
+					const float rotation,
+					const float layer,
 					const size_t frame_id) const {
-	if (last_frame_id_ != frame_id) {
+	if(last_frame_id_ != frame_id) {
 		last_frame_id_ = frame_id;
-		const FrameDescription& current_frame_description = frames_decriptions_ [frame_id];
+		const FrameDescription& current_frame_description = frames_decriptions_[frame_id];
 		const GLfloat texture_coords[] {
 			// U  V
 			current_frame_description.left_bottom_UV.x, current_frame_description.left_bottom_UV.y,
@@ -104,7 +104,7 @@ void Sprite::InsertFrames(std::vector<FrameDescription> frames_descriptions) {
 }
 
 double Sprite::GetFrameDuration(const size_t frame_id) const {
-	return frames_decriptions_ [frame_id].duration;
+	return frames_decriptions_[frame_id].duration;
 }
 size_t Sprite::GetFramesCount() const {
 	return frames_decriptions_.size();

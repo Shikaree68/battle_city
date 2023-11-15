@@ -13,7 +13,7 @@ Tank::Tank(const double max_velocity,
 		   const float layer)
 	: GameObject(GameObject::Type::Tank, position, size, 0.f, layer)
 	, orientation_(Orientation::Top)
-	, bullet_(std::make_shared<Bullet>(0.1, position_ + size_ / 4.f, size_ / 2.f, layer))
+	, bullet_(std::make_shared<Bullet>(0.1, position_ + size_ / 4.f, size_ / 2.f, size_, layer))
 	, sprite_top_(ResourceManager::GetSprite("tank_top_state"s))
 	, sprite_bottom_(ResourceManager::GetSprite("tank_bottom_state"s))
 	, sprite_left_(ResourceManager::GetSprite("tank_left_state"s))
@@ -97,6 +97,9 @@ void Tank::SetOrientation(const Orientation orientation) {
 }
 
 void Tank::Update(const double delta) {
+	if(bullet_->IsActive()) {
+		bullet_->Update(delta);
+	}
 	if(is_spawning_) {
 		sprite_animator_respawn_.Update(delta);
 		timer_respawn_.Update(delta);
@@ -133,7 +136,7 @@ void Tank::SetVelocity(const double velocity) {
 }
 
 void Tank::Fire() {
-	if(!bullet_->IsActive()) {
+	if(!is_spawning_ && !bullet_->IsActive()) {
 		static const auto size_quart = size_ / 4.f;
 		bullet_->Fire(position_ + size_quart + size_quart * direction_, direction_);
 	}
