@@ -14,48 +14,45 @@ void PhysicsEngine::Terminate() {
 }
 
 void PhysicsEngine::Update(const double delta) {
-	for(auto& current_object : dynamic_objects_) {
-		if(current_object->GetVelocity() > 0) {
-			if(current_object->GetDirection().x != 0.f) {
-				current_object->GetPosition() = glm::vec2(current_object->GetPosition().x,
-														  static_cast<uint32_t>(current_object->GetPosition().y / 4.f + 0.5f) * 4.f);
-			} else if(current_object->GetDirection().y != 0.f) {
-				current_object->GetPosition() = glm::vec2(static_cast<uint32_t>(current_object->GetPosition().x / 4.f + 0.5f) * 4.f,
-														  current_object->GetPosition().y);
-			}
+	for (auto &dynamic_object : dynamic_objects_) {
+		if (!(dynamic_object->GetVelocity() > 0.)) {
+			continue;
+		}
 
-			const auto new_position = current_object->GetPosition() +
-				current_object->GetDirection() *
-				static_cast<float>(current_object->GetVelocity() * delta);
-			const auto& colliders = current_object->GetColliders();
-			auto near_objects = level_->GetObjectsInArea(new_position, new_position + current_object->GetSize());
+		AlignDynamicObject(dynamic_object);
 
-			bool has_collision = false;
+		auto [dynamic_object_collision_direction, object_collision_direction] = GetOppositeCollisionDirections(dynamic_object);
 
-			for(const auto& current_near_object : near_objects) {
-				const auto& colliders_to_check = current_near_object->GetColliders();
-				if(current_near_object->CheckCanCollide(current_object->GetType()) && !colliders_to_check.empty()) {
-					if(CheckIntersection(colliders, new_position, colliders_to_check, current_near_object->GetPosition())) {
-						has_collision = true;
-						current_near_object->DoInCollide();
-						break;
+		bool has_collision = false;
+		const auto new_position = dynamic_object->GetPosition() +
+			dynamic_object->GetDirection() * static_cast<float>(dynamic_object->GetVelocity() * delta);
+		const auto &colliders = dynamic_object->GetColliders();
+		auto near_objects_to_check = level_->GetObjectsInArea(new_position, new_position + dynamic_object->GetSize());
+
+		for (const auto &dynamic_object_collider : colliders) {
+			for (const auto &near_object : near_objects_to_check) {
+				const auto &colliders_to_check = near_object->GetColliders();
+				if (near_object->CheckCanCollide(dynamic_object->GetType()) && !colliders_to_check.empty()) {
+					for (const auto &near_object_collider : near_object->GetColliders()) {
+						if (near_object_collider.is_active &&
+							CheckIntersection(near_object_collider, new_position, dynamic_object_collider, near_object->GetPosition())) {
+							has_collision = true;
+							if (near_object_collider.collision_callback) {
+								near_object_collider.collision_callback(*dynamic_object, object_collision_direction);
+							}
+							if (dynamic_object_collider.collision_callback) {
+								dynamic_object_collider.collision_callback(*near_object, dynamic_object_collision_direction);
+							}
+						}
 					}
 				}
 			}
+		}
 
-			if(!has_collision) {
-				current_object->GetPosition() = new_position;
-			} else {
-				if(current_object->GetDirection().x != 0.f) {
-					current_object->GetPosition() = glm::vec2(static_cast<uint32_t>(current_object->GetPosition().x / 8.f + 0.5f) * 8.f,
-															  current_object->GetPosition().y);
-				} else if(current_object->GetDirection().y != 0.f) {
-					current_object->GetPosition() = glm::vec2(current_object->GetPosition().x,
-															  static_cast<uint32_t>(current_object->GetPosition().y / 8.f + 0.5f) * 8.f);
-				}
-				current_object->DoInCollide();
-			}
-
+		if (!has_collision) {
+			dynamic_object->SetPosition(new_position);
+		} else {
+			AlignDynamicObject(dynamic_object);
 		}
 	}
 }
@@ -67,29 +64,52 @@ void PhysicsEngine::AddDynamicGameObject(std::shared_ptr<GameObject> game_object
 void PhysicsEngine::SetCurrentLevel(std::shared_ptr<Level> level) {
 	level_.swap(level);
 }
-bool PhysicsEngine::CheckIntersection(const std::vector<AABB>& colliders1, const glm::vec2& position1, const std::vector<AABB>& colliders2, const glm::vec2& position2) {
-	for(const auto& collider1 : colliders1) {
-		const glm::vec2 collider1_bottom_left_world = collider1.bottom_left + position1;
-		const glm::vec2 collider1_top_right_world = collider1.top_right + position1;
-		for(const auto& collider2 : colliders2) {
-			const glm::vec2 collider2_bottom_left_world = collider2.bottom_left + position2;
-			const glm::vec2 collider2_top_right_world = collider2.top_right + position2;
+bool PhysicsEngine::CheckIntersection(const Collider &collider1, const glm::vec2 &position1,
+									  const Collider &collider2, const glm::vec2 &position2) {
+	const glm::vec2 collider1_bottom_left_world = collider1.bounding_box.bottom_left + position1;
+	const glm::vec2 collider1_top_right_world = collider1.bounding_box.top_right + position1;
 
-			if(collider1_bottom_left_world.x >= collider2_top_right_world.x) {
-				 continue;
-			}
-			if(collider1_top_right_world.x <= collider2_bottom_left_world.x) {
-				continue;
-			}
-			if(collider1_bottom_left_world.y >= collider2_top_right_world.y) {
-				continue;
-			}
-			if(collider1_top_right_world.y <= collider2_bottom_left_world.y) {
-				continue;
-			}
-			return true;
-		}
+	const glm::vec2 collider2_bottom_left_world = collider2.bounding_box.bottom_left + position2;
+	const glm::vec2 collider2_top_right_world = collider2.bounding_box.top_right + position2;
+
+	if (collider1_bottom_left_world.x >= collider2_top_right_world.x) {
+		return false;
 	}
-	return false;
+	if (collider1_top_right_world.x <= collider2_bottom_left_world.x) {
+		return false;
+	}
+	if (collider1_bottom_left_world.y >= collider2_top_right_world.y) {
+		return false;
+	}
+	if (collider1_top_right_world.y <= collider2_bottom_left_world.y) {
+		return false;
+	}
+	return true;
+}
+
+void PhysicsEngine::AlignDynamicObject(std::shared_ptr<GameObject> dynamic_object) {
+	if (dynamic_object->GetDirection().x != 0.f) {
+		dynamic_object->SetPosition({ dynamic_object->GetPosition().x,
+									static_cast<uint32_t>(dynamic_object->GetPosition().y / 4.f + 0.5f) * 4.f });
+	} else if (dynamic_object->GetDirection().y != 0.f) {
+		dynamic_object->SetPosition({ static_cast<uint32_t>(dynamic_object->GetPosition().x / 4.f + 0.5f) * 4.f,
+									dynamic_object->GetPosition().y });
+	}
+}
+
+std::pair<CollisionDirection, CollisionDirection> PhysicsEngine::GetOppositeCollisionDirections(std::shared_ptr<GameObject> dynamic_object) {
+	CollisionDirection main_collision_direction = CollisionDirection::Right;
+	CollisionDirection opposite_collision_direction = CollisionDirection::Left;
+	if (dynamic_object->GetDirection().x < 0) {
+		main_collision_direction = CollisionDirection::Left;
+		opposite_collision_direction = CollisionDirection::Right;
+	} else if (dynamic_object->GetDirection().y > 0) {
+		main_collision_direction = CollisionDirection::Bottom;
+		opposite_collision_direction = CollisionDirection::Top;
+	} else if (dynamic_object->GetDirection().y < 0) {
+		main_collision_direction = CollisionDirection::Top;
+		opposite_collision_direction = CollisionDirection::Bottom;
+	}
+	return { main_collision_direction ,opposite_collision_direction };
 }
 }

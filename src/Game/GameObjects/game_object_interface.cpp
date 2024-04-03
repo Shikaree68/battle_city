@@ -1,7 +1,7 @@
 #include "game_object_interface.h"
 
-GameObject::GameObject(Type type, const glm::vec2& position, 
-					   const glm::vec2& size, const float rotation, const float layer)
+GameObject::GameObject(Type type, const glm::vec2 &position,
+					   const glm::vec2 &size, const float rotation, const float layer)
 	: type_(type)
 	, position_(position)
 	, size_(size)
@@ -10,15 +10,19 @@ GameObject::GameObject(Type type, const glm::vec2& position,
 	, direction_(0, 1.f)
 	, velocity_(0) {}
 
-glm::vec2& GameObject::GetPosition() {
+glm::vec2 GameObject::GetPosition() const {
 	return position_;
 }
 
-glm::vec2& GameObject::GetDirection() {
+void GameObject::SetPosition(glm::vec2 new_position) {
+	position_ = new_position;
+}
+
+glm::vec2 GameObject::GetDirection() const {
 	return direction_;
 }
 
-double GameObject::GetVelocity() {
+double GameObject::GetVelocity() const {
 	return velocity_;
 }
 
@@ -36,11 +40,11 @@ GameObject::Type GameObject::GetType() const {
 	return type_;
 }
 
-const glm::vec2& GameObject::GetSize() const {
+const glm::vec2 &GameObject::GetSize() const {
 	return size_;
 }
 
-const std::vector<Physics::AABB>& GameObject::GetColliders() const {
+const std::vector<Physics::Collider> &GameObject::GetColliders() const {
 	return colliders_;
 }
 

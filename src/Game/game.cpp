@@ -19,7 +19,7 @@
 using namespace std::literals;
 
 Game::Game(const glm::ivec2& window_size)
-	: current_state_(GameState::Active)
+	: state_(GameState::Active)
 	, window_size_(window_size) {
 	keys_.fill(false);
 }

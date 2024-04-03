@@ -27,7 +27,7 @@ private:
 		Pause,
 	};
 
-	GameState current_state_;
+	GameState state_;
 	glm::ivec2 window_size_;
 	std::shared_ptr<Tank> tank_;
 	std::shared_ptr<Level> level_;

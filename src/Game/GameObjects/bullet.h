@@ -31,7 +31,6 @@ public:
 		return is_active_;
 	}
 	void Fire(const glm::vec2& position, const glm::vec2& direction);
-	void DoInCollide() override;
 
 private:
 	glm::vec2 explosion_size_;

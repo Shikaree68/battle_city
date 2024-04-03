@@ -41,7 +41,7 @@ public:
 	void Render() const override;
 	void Update(const double delta) override;
 private:
-	std::array<State, 4> current_state_;
+	std::array<State, 4> state_;
  	std::shared_ptr<RenderEngine::Sprite> sprite_;
 	std::array<glm::vec2, 4> block_offsets_;
 	void RenderBlock(const Location location) const;

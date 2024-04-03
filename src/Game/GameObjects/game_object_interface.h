@@ -21,16 +21,17 @@ public:
 			   const glm::vec2& size, const float rotation, const float layer);
 	virtual void Render() const = 0;
 	virtual void Update(const double delta) = 0;
-	virtual glm::vec2& GetPosition();
-	virtual glm::vec2& GetDirection();
-	virtual double GetVelocity();
+	virtual glm::vec2 GetPosition() const;
+	virtual void SetPosition(glm::vec2 new_position);
+	virtual glm::vec2 GetDirection() const;
+	virtual double GetVelocity() const;
 	virtual void SetVelocity(const double velocity);
 	virtual bool CheckCanCollide(const Type type) const;
 	virtual void DoInCollide();
 
 	Type GetType() const;
 	const glm::vec2& GetSize() const;
-	const std::vector<Physics::AABB>& GetColliders() const;
+	const std::vector<Physics::Collider>& GetColliders() const;
 
 	virtual ~GameObject();
 protected:
@@ -42,5 +43,5 @@ protected:
 
 	glm::vec2 direction_;
 	double velocity_;
-	std::vector<Physics::AABB> colliders_;
+	std::vector<Physics::Collider> colliders_;
 };
