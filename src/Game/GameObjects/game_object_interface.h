@@ -27,7 +27,6 @@ public:
 	virtual double GetVelocity() const;
 	virtual void SetVelocity(const double velocity);
 	virtual bool CheckCanCollide(const Type type) const;
-	virtual void DoInCollide();
 
 	Type GetType() const;
 	const glm::vec2& GetSize() const;

@@ -33,9 +33,8 @@ void PhysicsEngine::Update(const double delta) {
 			for (const auto &near_object : near_objects_to_check) {
 				const auto &colliders_to_check = near_object->GetColliders();
 				if (near_object->CheckCanCollide(dynamic_object->GetType()) && !colliders_to_check.empty()) {
-					for (const auto &near_object_collider : near_object->GetColliders()) {
-						if (near_object_collider.is_active &&
-							CheckIntersection(near_object_collider, new_position, dynamic_object_collider, near_object->GetPosition())) {
+					for (const auto &near_object_collider : colliders_to_check) {
+						if (near_object_collider.is_active && CheckIntersection(dynamic_object_collider, new_position, near_object_collider, near_object->GetPosition())) {
 							has_collision = true;
 							if (near_object_collider.collision_callback) {
 								near_object_collider.collision_callback(*dynamic_object, object_collision_direction);

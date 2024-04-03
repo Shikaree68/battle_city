@@ -34,7 +34,6 @@ bool GameObject::CheckCanCollide(const Type type) const {
 	return true;
 }
 
-void GameObject::DoInCollide() {}
 
 GameObject::Type GameObject::GetType() const {
 	return type_;

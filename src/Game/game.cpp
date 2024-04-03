@@ -73,7 +73,7 @@ bool Game::Initialize() {
 		std::cerr << "Can't find shader program: "sv << "sprite_shader"sv << std::endl;
 		return false;
 	}
-	level_ = std::make_shared<Level>(ResourceManager::GetLevels()[0]);
+	level_ = std::make_shared<Level>(ResourceManager::GetLevels()[2]);
 	window_size_.x = static_cast<int>(level_->GetLevelWidth());
 	window_size_.y = static_cast<int>(level_->GetLevelHeight());
 	Physics::PhysicsEngine::SetCurrentLevel(level_);

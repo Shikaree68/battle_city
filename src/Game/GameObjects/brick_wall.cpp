@@ -134,9 +134,9 @@ BrickWall::State BrickWall::GetBrickStateAfterCollision(const State current_stat
 		case Physics::CollisionDirection::Right:
 			return State::Left;
 		case Physics::CollisionDirection::Top:
-			return State::Bottom;
-		case Physics::CollisionDirection::Bottom:
 			return State::Top;
+		case Physics::CollisionDirection::Bottom:
+			return State::Bottom;
 		}
 
 	case State::Top:
@@ -170,9 +170,9 @@ BrickWall::State BrickWall::GetBrickStateAfterCollision(const State current_stat
 		case Physics::CollisionDirection::Right:
 			return State::Destroyed;
 		case Physics::CollisionDirection::Top:
-			return State::BottomLeft;
-		case Physics::CollisionDirection::Bottom:
 			return State::TopLeft;
+		case Physics::CollisionDirection::Bottom:
+			return State::BottomLeft;
 		}
 
 	case State::Right:
@@ -182,9 +182,9 @@ BrickWall::State BrickWall::GetBrickStateAfterCollision(const State current_stat
 		case Physics::CollisionDirection::Right:
 			return State::Destroyed;
 		case Physics::CollisionDirection::Top:
-			return State::BottomRight;
-		case Physics::CollisionDirection::Bottom:
 			return State::TopRight;
+		case Physics::CollisionDirection::Bottom:
+			return State::BottomRight;
 		}
 
 	default:
@@ -195,16 +195,16 @@ BrickWall::State BrickWall::GetBrickStateAfterCollision(const State current_stat
 Physics::AABB BrickWall::GetAABBForBrickState(const Location location, const State state, const glm::vec2 &size) {
 	glm::vec2 block_offset(0);
 	switch (location) {
+	case Location::BottomLeft:
+		break;
+	case Location::BottomRight:
+		block_offset.x += size.x / 2;
+		break;
 	case Location::TopLeft:
 		block_offset.y += size.y / 2;
 		break;
 	case Location::TopRight:
 		block_offset += size / 2.f;
-		break;
-	case Location::BottomLeft:
-		break;
-	case Location::BottomRight:
-		block_offset.x += size.x / 2;
 		break;
 	}
 
