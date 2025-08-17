@@ -49,8 +49,11 @@ add_executable(${PROJECT_NAME}
 
     src/Game/game.cpp
     src/Game/game.h
-    src/Game/level.cpp
-    src/Game/level.h
+    src/Game/GameStates/game_state.h
+    src/Game/GameStates/start_screen.h
+    src/Game/GameStates/start_screen.cpp
+    src/Game/GameStates/level.cpp
+    src/Game/GameStates/level.h
     src/Game/GameObjects/game_object_interface.cpp
     src/Game/GameObjects/game_object_interface.h
     src/Game/GameObjects/tank.cpp

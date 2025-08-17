@@ -1,12 +1,12 @@
 #include "level.h"
 
-#include "GameObjects/brick_wall.h"
-#include "GameObjects/beton_wall.h"
-#include "GameObjects/trees.h"
-#include "GameObjects/ice.h"
-#include "GameObjects/water.h"
-#include "GameObjects/eagle.h"
-#include "GameObjects/border.h"
+#include "../GameObjects/brick_wall.h"
+#include "../GameObjects/beton_wall.h"
+#include "../GameObjects/trees.h"
+#include "../GameObjects/ice.h"
+#include "../GameObjects/water.h"
+#include "../GameObjects/eagle.h"
+#include "../GameObjects/border.h"
 
 #include <iostream>
 #include <algorithm>
@@ -154,13 +154,11 @@ void Level::Update(const double delta) {
 		}
 	}
 }
-
-uint64_t Level::GetLevelWidth() const {
-	return width_in_pixels_ + 3ULL * BLOCK_SIZE;
+std::uint32_t Level::GetStateWidth() const {
+	return static_cast<std::uint32_t>((width_in_blocks_ + 3) * BLOCK_SIZE);
 }
-
-uint64_t Level::GetLevelHeight() const {
-	return height_in_pixels_ + 1ULL * BLOCK_SIZE;
+std::uint32_t Level::GetStateHeight() const {
+	return static_cast<std::uint32_t>((height_in_blocks_ + 1) * BLOCK_SIZE);
 }
 
 std::vector<std::shared_ptr<GameObject>> Level::GetObjectsInArea(const glm::vec2 bottom_left,

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "game_state.h"
+
 #include <vector>
 #include <string>
 #include <memory>
@@ -8,15 +10,15 @@
 
 class GameObject;
 
-class Level{
+class Level : public GameState {
 public:
 	static constexpr uint32_t BLOCK_SIZE = 16;
 
 	Level(const std::vector<std::string>& level_description);
 	void Render() const;
 	void Update(const double delta);
-	uint64_t GetLevelWidth() const;
-	uint64_t GetLevelHeight() const;
+	virtual std::uint32_t GetStateWidth() const override;
+	virtual std::uint32_t GetStateHeight() const override;
 
 	const glm::ivec2& GetPlayerRespawn_1() const {
 		return player_respawn_1_;

@@ -8,7 +8,8 @@
 #include "../Renderer/sprite.h"
 #include "../Physics/physics_engine.h"
 
-#include "level.h"
+#include "GameStates/level.h"
+#include "GameStates/start_screen.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/mat4x4.hpp>
@@ -19,7 +20,7 @@
 using namespace std::literals;
 
 Game::Game(const glm::ivec2& window_size)
-	: state_(GameState::Active)
+	: state_(GameState::StartScreen)
 	, window_size_(window_size) {
 	keys_.fill(false);
 }
@@ -27,42 +28,58 @@ Game::Game(const glm::ivec2& window_size)
 Game::~Game() {}
 
 void Game::Render() {
-	if(tank_) {
-		tank_->Render();
-	}
-	if(level_) {
-		level_->Render();
+	switch (state_) {
+	case Game::GameState::StartScreen:
+		start_screen_->Render();
+		break;
+	case Game::GameState::Level:
+		if (tank_) {
+			tank_->Render();
+		}
+		if (level_) {
+			level_->Render();
+		}
+		break;
 	}
 }
 
-void Game::Update(const double delta) {
-	if(level_) {
-		level_->Update(delta);
-	}
-	if(tank_) {
-		if(keys_[GLFW_KEY_W]) {
-			tank_->SetOrientation(Tank::Orientation::Top);
-			tank_->SetVelocity(tank_->GetMaxVelocity());
-		} else if(keys_[GLFW_KEY_A]) {
-			tank_->SetOrientation(Tank::Orientation::Left);
-			tank_->SetVelocity(tank_->GetMaxVelocity());
-		} else if(keys_[GLFW_KEY_D]) {
-			tank_->SetOrientation(Tank::Orientation::Right);
-			tank_->SetVelocity(tank_->GetMaxVelocity());
-		} else if(keys_[GLFW_KEY_S]) {
-			tank_->SetOrientation(Tank::Orientation::Bottom);
-			tank_->SetVelocity(tank_->GetMaxVelocity());
-		} else {
-			tank_->SetVelocity(0);
+void Game::Update(double delta) {
+	switch (state_) {
+	case Game::GameState::StartScreen:
+		if (keys_[GLFW_KEY_ENTER]) {
+			state_ = GameState::Level;
 		}
-		if(tank_ && keys_[GLFW_KEY_SPACE]) {
-			tank_->Fire();
+		break;
+	case Game::GameState::Level:
+		if (level_) {
+			level_->Update(delta);
 		}
-		tank_->Update(delta);
+		if (tank_) {
+			if (keys_[GLFW_KEY_W]) {
+				tank_->SetOrientation(Tank::Orientation::Top);
+				tank_->SetVelocity(tank_->GetMaxVelocity());
+			} else if (keys_[GLFW_KEY_A]) {
+				tank_->SetOrientation(Tank::Orientation::Left);
+				tank_->SetVelocity(tank_->GetMaxVelocity());
+			} else if (keys_[GLFW_KEY_D]) {
+				tank_->SetOrientation(Tank::Orientation::Right);
+				tank_->SetVelocity(tank_->GetMaxVelocity());
+			} else if (keys_[GLFW_KEY_S]) {
+				tank_->SetOrientation(Tank::Orientation::Bottom);
+				tank_->SetVelocity(tank_->GetMaxVelocity());
+			} else {
+				tank_->SetVelocity(0);
+			}
+			if (tank_ && keys_[GLFW_KEY_SPACE]) {
+				tank_->Fire();
+			}
+			tank_->Update(delta);
+		}
+		break;
 	}
 };
 
-void Game::SetKey(const int key, int action) {
+void Game::SetKey(int key, int action) {
 	keys_[key] = action;
 }
 
@@ -73,9 +90,10 @@ bool Game::Initialize() {
 		std::cerr << "Can't find shader program: "sv << "sprite_shader"sv << std::endl;
 		return false;
 	}
-	level_ = std::make_shared<Level>(ResourceManager::GetLevels()[2]);
-	window_size_.x = static_cast<int>(level_->GetLevelWidth());
-	window_size_.y = static_cast<int>(level_->GetLevelHeight());
+	start_screen_ = std::make_shared<StartScreen>(ResourceManager::GetStartScreen());
+	level_ = std::make_shared<Level>(ResourceManager::GetLevels()[0]);
+	window_size_.x = static_cast<int>(level_->GetStateWidth());
+	window_size_.y = static_cast<int>(level_->GetStateHeight());
 	Physics::PhysicsEngine::SetCurrentLevel(level_);
 
 	glm::mat4 projection_matrix = glm::ortho(0.f, static_cast<float>(window_size_.x),
@@ -91,10 +109,20 @@ bool Game::Initialize() {
 	return true;
 }
 
-size_t Game::GetCurrentLevelWidth() const {
-	return level_->GetLevelWidth();
+dimension_t Game::GetCurrentWidth() const {
+	switch (state_) {
+	case Game::GameState::StartScreen:
+		return start_screen_->GetStateWidth();
+	case Game::GameState::Level:
+		return level_->GetStateWidth();
+	}
 }
 
-size_t Game::GetCurrentLevelHeight() const {
-	return level_->GetLevelHeight();
+dimension_t Game::GetCurrentHeight() const {
+	switch (state_) {
+	case Game::GameState::StartScreen:
+		return start_screen_->GetStateHeight();
+	case Game::GameState::Level:
+		return level_->GetStateHeight();
+	}
 }

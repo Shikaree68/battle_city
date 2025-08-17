@@ -25,7 +25,7 @@ void glfwWindowSizeCallback(GLFWwindow* window, int width, int height){
 	WINDOW_SIZE.x = width;
 	WINDOW_SIZE.y = height;
 
-	const float level_aspect_ratio = static_cast<float>(game->GetCurrentLevelWidth()) / game->GetCurrentLevelHeight();	
+	const float level_aspect_ratio = static_cast<float>(game->GetCurrentWidth()) / game->GetCurrentHeight();	
 	uint32_t view_port_width = WINDOW_SIZE.x;
 	uint32_t view_port_height = WINDOW_SIZE.y;
 	uint32_t view_port_left_offset = 0;
@@ -43,14 +43,14 @@ void glfwWindowSizeCallback(GLFWwindow* window, int width, int height){
 }
 
 void glfwKeyCallback(GLFWwindow* p_window, int key, int scancode, int action,
-					 int mode){
+					 int mode) {
 	if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS){
 		glfwSetWindowShouldClose(p_window, GL_TRUE);
 	}
 	game->SetKey(key, action);
 }
 
-int main(int argc, char** argv){
+int main(int argc, char** argv) {
 	/* Initialize the library */
 	if(!glfwInit()){
 		std::cout << "glfwInit failed!"sv << std::endl;
@@ -88,7 +88,7 @@ int main(int argc, char** argv){
 		ResourceManager::SetExecutablePath(argv[0]);	
 		Physics::PhysicsEngine::Initialize();
 		game->Initialize();
-		glfwSetWindowSize(p_window, static_cast<int>(3 * game->GetCurrentLevelWidth()), 3 * static_cast<int>(game->GetCurrentLevelHeight()));
+		glfwSetWindowSize(p_window, static_cast<int>(3 * game->GetCurrentWidth()), static_cast<int>(3 * game->GetCurrentHeight()));
 		auto last_time = std::chrono::high_resolution_clock::now();
 
 		/* Loop until the user closes the window */

@@ -21,6 +21,7 @@ ResourceManager::TexturesMap ResourceManager::textures_;
 ResourceManager::SpritesMap ResourceManager::sprites_;
 std::string ResourceManager::path_;
 std::vector<std::vector<std::string>> ResourceManager::levels_;
+std::vector<std::string> ResourceManager::start_screen_;
 
 void ResourceManager::SetExecutablePath(const std::string& executable_path){
 	size_t found = executable_path.find_last_of("/\\"sv);
@@ -203,21 +204,39 @@ bool ResourceManager::LoadJsonResources(const std::string& json_path){
 		}
 	}
 
+	auto start_screen = document.FindMember("start_screen");
+	if (start_screen != document.MemberEnd()) {
+		const auto description = start_screen->value.GetArray();
+		start_screen_.reserve(description.Size());
+		std::size_t max_length = 0;
+		for (const auto &current_row : description) {
+			start_screen_.emplace_back(current_row.GetString());
+			if (max_length < start_screen_.back().length()) {
+				max_length = start_screen_.back().length();
+			}
+		}
+		for (auto &current_row : start_screen_) {
+			while (current_row.length() < max_length) {
+				current_row.append("F");
+			}
+		}
+	}
+
 	auto levels = document.FindMember("levels");
-	if(levels != document.MemberEnd()){
-		for(const auto& current_level : levels->value.GetArray()){
+	if (levels != document.MemberEnd()) {
+		for (const auto& current_level : levels->value.GetArray()) {
 			const auto description = current_level["description"].GetArray();
 			std::vector<std::string> level_rows;
 			level_rows.reserve(description.Size());
 			size_t max_length = 0;
-			for(const auto& level_row : description){
+			for (const auto& level_row : description){
 				level_rows.emplace_back(level_row.GetString());
-				if(max_length < level_rows.back().length()){
+				if (max_length < level_rows.back().length()) {
 					max_length = level_rows.back().length();
 				}
 			}
-			for(auto& current_row : level_rows){
-				while(current_row.length() < max_length){
+			for (auto& current_row : level_rows) {
+				while (current_row.length() < max_length) {
 					current_row.append("D");
 				}
 			}
@@ -227,8 +246,11 @@ bool ResourceManager::LoadJsonResources(const std::string& json_path){
 	return true;
 }
 
-const std::vector<std::vector<std::string>>& ResourceManager::GetLevels(){
+const std::vector<std::vector<std::string>>& ResourceManager::GetLevels() {
 	return levels_;
+}
+const std::vector<std::string>& ResourceManager::GetStartScreen() {
+	return start_screen_;
 }
 
 std::shared_ptr<RenderEngine::Texture2D> ResourceManager::LoadTexture_atlas(const std::string& texture_name,

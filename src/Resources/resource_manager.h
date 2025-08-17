@@ -26,7 +26,6 @@ public:
 																	const std::string& vertex_path,
 																	const std::string& fragment_path);
 	static std::shared_ptr<RenderEngine::ShaderProgram> GetShaderProgram(const std::string& shader_name);
-
 	static std::shared_ptr<RenderEngine::Texture2D> LoadTexture(const std::string& texture_name, const std::string& texure_path);
 	static std::shared_ptr<RenderEngine::Texture2D> LoadTexture_atlas(const std::string& texture_name,
 																	 const std::string& texture_path,
@@ -34,16 +33,14 @@ public:
 																	 const uint32_t sub_texture_width,
 																	 const uint32_t sub_texture_height);
 	static std::shared_ptr<RenderEngine::Texture2D> GetTexture(const std::string& texture_name);
-
 	static std::shared_ptr<RenderEngine::Sprite> LoadSprite(const std::string& sprite_name,
 															const std::string& texture_name,
 															const std::string& shader_name,
 															const std::string& sub_texture_name = "default");
 	static std::shared_ptr<RenderEngine::Sprite> GetSprite(const std::string& sprite_name);
-
 	static bool LoadJsonResources(const std::string& json_path);
-
 	static const std::vector<std::vector<std::string>>& GetLevels();
+	static const std::vector<std::string> &GetStartScreen();
 
 private:
 	typedef std::map<const std::string, std::shared_ptr<RenderEngine::ShaderProgram>> ShaderProgramsMap;
@@ -54,6 +51,7 @@ private:
 	static TexturesMap textures_;
 	static SpritesMap sprites_;
 	static std::vector<std::vector<std::string>> levels_;
+	static std::vector<std::string> start_screen_;
 
 	static std::string GetFileString(const std::string& relative_path);
 };
