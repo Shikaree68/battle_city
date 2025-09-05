@@ -107,6 +107,15 @@
         "type1_yellow_right1",
         "type1_yellow_right2"
       ]
+    },
+    {
+      "name": "menu_128x64",
+      "filepath": "res/textures/menu_128x64.png",
+      "subtexture_width": 128,
+      "subtexture_height": 64,
+      "subtextures": [
+        "menu"
+      ]
     }
   ],
   "sprites": [
@@ -527,6 +536,12 @@
       "texture_atlas": "map_texture_atlas",
       "shader": "sprite_shader",
       "initial_subtexture": "bonus_gun"
+    },
+    {
+      "name": "menu",
+      "texture_atlas": "menu_128x64",
+      "shader": "sprite_shader",
+      "initial_subtexture": "menu"
     }
   ],
   "start_screen": [

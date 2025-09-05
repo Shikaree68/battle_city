@@ -9,14 +9,16 @@
 #include <glm/vec2.hpp>
 
 class GameObject;
+class Tank;
 
 class Level : public GameState {
 public:
 	static constexpr uint32_t BLOCK_SIZE = 16;
 
 	Level(const std::vector<std::string>& level_description);
-	void Render() const;
-	void Update(const double delta);
+	virtual void Render() const override;
+	virtual void Update(const double delta) override;
+	virtual void ProcessInput(const std::array<bool, 349>& keys) override; 
 	virtual std::uint32_t GetStateWidth() const override;
 	virtual std::uint32_t GetStateHeight() const override;
 
@@ -38,6 +40,7 @@ public:
 
 	std::vector<std::shared_ptr<GameObject>> GetObjectsInArea(const glm::vec2 bottom_left, 
 															  const glm::vec2 top_right) const;
+	void InitPhysics();
 
 private:
 	uint32_t width_in_blocks_;
@@ -53,6 +56,5 @@ private:
 	glm::ivec2 enemy_respawn_3_;
 
 	std::vector<std::shared_ptr<GameObject>> level_objects_;
-
-
+	std::shared_ptr<Tank> tank_;
 };

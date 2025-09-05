@@ -7,7 +7,9 @@
 #include "../GameObjects/water.h"
 #include "../GameObjects/eagle.h"
 #include "../GameObjects/border.h"
+#include "../GameObjects/tank.h"
 
+#include <GLFW/glfw3.h>
 #include <iostream>
 #include <algorithm>
 
@@ -145,6 +147,7 @@ void Level::Render() const {
 			current_map_obj->Render();
 		}
 	}
+	tank_->Render();
 }
 
 void Level::Update(const double delta) {
@@ -152,6 +155,27 @@ void Level::Update(const double delta) {
 		if(current_map_obj) {
 			current_map_obj->Update(delta);
 		}
+	}
+	tank_->Update(delta);
+}
+void Level::ProcessInput(const std::array<bool, 349> &keys) {
+	if (keys[GLFW_KEY_W]) {
+		tank_->SetOrientation(Tank::Orientation::Top);
+		tank_->SetVelocity(tank_->GetMaxVelocity());
+	} else if (keys[GLFW_KEY_A]) {
+		tank_->SetOrientation(Tank::Orientation::Left);
+		tank_->SetVelocity(tank_->GetMaxVelocity());
+	} else if (keys[GLFW_KEY_D]) {
+		tank_->SetOrientation(Tank::Orientation::Right);
+		tank_->SetVelocity(tank_->GetMaxVelocity());
+	} else if (keys[GLFW_KEY_S]) {
+		tank_->SetOrientation(Tank::Orientation::Bottom);
+		tank_->SetVelocity(tank_->GetMaxVelocity());
+	} else {
+		tank_->SetVelocity(0);
+	}
+	if (tank_ && keys[GLFW_KEY_SPACE]) {
+		tank_->Fire();
 	}
 }
 std::uint32_t Level::GetStateWidth() const {
@@ -200,4 +224,9 @@ std::vector<std::shared_ptr<GameObject>> Level::GetObjectsInArea(const glm::vec2
 		output.push_back(level_objects_[level_objects_.size() - 4]);
 	}
 	return output;
+}
+
+void Level::InitPhysics() {
+	tank_ = std::make_shared<Tank>(0.05f, GetPlayerRespawn_1(), glm::vec2(Level::BLOCK_SIZE, Level::BLOCK_SIZE), 0.f);
+	Physics::PhysicsEngine::AddDynamicGameObject(tank_);
 }

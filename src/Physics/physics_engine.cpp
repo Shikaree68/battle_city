@@ -62,6 +62,8 @@ void PhysicsEngine::AddDynamicGameObject(std::shared_ptr<GameObject> game_object
 
 void PhysicsEngine::SetCurrentLevel(std::shared_ptr<Level> level) {
 	level_.swap(level);
+	dynamic_objects_.clear();
+	level_->InitPhysics();
 }
 bool PhysicsEngine::CheckIntersection(const Collider &collider1, const glm::vec2 &position1,
 									  const Collider &collider2, const glm::vec2 &position2) {

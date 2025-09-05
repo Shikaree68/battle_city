@@ -17,29 +17,16 @@ int GLFW_VER_MAJOR = 4;
 int GLFW_VER_MINOR = 6;
 }  // namespace INFO
 
-glm::ivec2 WINDOW_SIZE(13 * 16, 14 * 16);
-std::unique_ptr<Game> game(std::make_unique<Game>(WINDOW_SIZE));
+static constexpr std::uint16_t scale = 3;
+static constexpr std::uint16_t block_size = 16;
+glm::uvec2 window_size(scale * 16 * block_size, scale * 15 * block_size);
+std::unique_ptr<Game> game(std::make_unique<Game>(window_size));
 
 
 void glfwWindowSizeCallback(GLFWwindow* window, int width, int height){
-	WINDOW_SIZE.x = width;
-	WINDOW_SIZE.y = height;
-
-	const float level_aspect_ratio = static_cast<float>(game->GetCurrentWidth()) / game->GetCurrentHeight();	
-	uint32_t view_port_width = WINDOW_SIZE.x;
-	uint32_t view_port_height = WINDOW_SIZE.y;
-	uint32_t view_port_left_offset = 0;
-	uint32_t view_port_bottom_offset = 0;
-
-	if(WINDOW_SIZE.x * 1.f/ WINDOW_SIZE.y > level_aspect_ratio){
-		view_port_width = static_cast<uint32_t>(WINDOW_SIZE.y * level_aspect_ratio);
-		view_port_left_offset = (WINDOW_SIZE.x - view_port_width) / 2;
-	} else{
-		view_port_height = static_cast<uint32_t>(WINDOW_SIZE.x / level_aspect_ratio);
-		view_port_bottom_offset = (WINDOW_SIZE.y - view_port_height) / 2;
-	}
-
-	RenderEngine::Renderer::SetViewport(view_port_width, view_port_height, view_port_left_offset, view_port_bottom_offset);
+	window_size.x = width;
+	window_size.y = height;
+	game->SetWindowSize(window_size);
 }
 
 void glfwKeyCallback(GLFWwindow* p_window, int key, int scancode, int action,
@@ -62,7 +49,7 @@ int main(int argc, char** argv) {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	/* Create a windowed mode window and its OpenGL context */
-	GLFWwindow* p_window = glfwCreateWindow(WINDOW_SIZE.x, WINDOW_SIZE.y, "Battle City", nullptr, nullptr);
+	GLFWwindow* p_window = glfwCreateWindow(window_size.x, window_size.y, "Battle City", nullptr, nullptr);
 	if(!p_window){
 		std::cout << "glfwCreateWindow failed!"sv << std::endl;
 		glfwTerminate();
@@ -88,7 +75,7 @@ int main(int argc, char** argv) {
 		ResourceManager::SetExecutablePath(argv[0]);	
 		Physics::PhysicsEngine::Initialize();
 		game->Initialize();
-		glfwSetWindowSize(p_window, static_cast<int>(3 * game->GetCurrentWidth()), static_cast<int>(3 * game->GetCurrentHeight()));
+		//glfwSetWindowSize(p_window, static_cast<int>(3 * game->GetCurrentWidth()), static_cast<int>(3 * game->GetCurrentHeight()));
 		auto last_time = std::chrono::high_resolution_clock::now();
 
 		/* Loop until the user closes the window */

@@ -6,6 +6,7 @@
 #include "../Resources/resource_manager.h"
 #include "../Renderer/texture_2D.h"
 #include "../Renderer/sprite.h"
+#include "../Renderer/renderer.h"
 #include "../Physics/physics_engine.h"
 
 #include "GameStates/level.h"
@@ -19,8 +20,8 @@
 
 using namespace std::literals;
 
-Game::Game(const glm::ivec2& window_size)
-	: state_(GameState::StartScreen)
+Game::Game(const glm::uvec2& window_size)
+	: state_(State::StartScreen)
 	, window_size_(window_size) {
 	keys_.fill(false);
 }
@@ -28,55 +29,22 @@ Game::Game(const glm::ivec2& window_size)
 Game::~Game() {}
 
 void Game::Render() {
-	switch (state_) {
-	case Game::GameState::StartScreen:
-		start_screen_->Render();
-		break;
-	case Game::GameState::Level:
-		if (tank_) {
-			tank_->Render();
-		}
-		if (level_) {
-			level_->Render();
-		}
-		break;
-	}
+	game_state_->Render();
 }
 
 void Game::Update(double delta) {
-	switch (state_) {
-	case Game::GameState::StartScreen:
-		if (keys_[GLFW_KEY_ENTER]) {
-			state_ = GameState::Level;
-		}
-		break;
-	case Game::GameState::Level:
-		if (level_) {
-			level_->Update(delta);
-		}
-		if (tank_) {
-			if (keys_[GLFW_KEY_W]) {
-				tank_->SetOrientation(Tank::Orientation::Top);
-				tank_->SetVelocity(tank_->GetMaxVelocity());
-			} else if (keys_[GLFW_KEY_A]) {
-				tank_->SetOrientation(Tank::Orientation::Left);
-				tank_->SetVelocity(tank_->GetMaxVelocity());
-			} else if (keys_[GLFW_KEY_D]) {
-				tank_->SetOrientation(Tank::Orientation::Right);
-				tank_->SetVelocity(tank_->GetMaxVelocity());
-			} else if (keys_[GLFW_KEY_S]) {
-				tank_->SetOrientation(Tank::Orientation::Bottom);
-				tank_->SetVelocity(tank_->GetMaxVelocity());
-			} else {
-				tank_->SetVelocity(0);
-			}
-			if (tank_ && keys_[GLFW_KEY_SPACE]) {
-				tank_->Fire();
-			}
-			tank_->Update(delta);
-		}
-		break;
-	}
+	game_state_->ProcessInput(keys_);
+	game_state_->Update(delta);
+	//switch (state_) {
+	//case Game::State::StartScreen:
+	//	if (keys_[GLFW_KEY_ENTER]) {
+	//		state_ = State::Level;
+	//		StartNewLevel(0);
+	//	}
+	//	break;
+	//case Game::State::Level:
+	//	break;
+	//}
 };
 
 void Game::SetKey(int key, int action) {
@@ -85,44 +53,57 @@ void Game::SetKey(int key, int action) {
 
 bool Game::Initialize() {
 	ResourceManager::LoadJsonResources("res/resources.json"s);
-	auto sprite_shader_program = ResourceManager::GetShaderProgram("sprite_shader"s);
-	if(!sprite_shader_program) {
+	sprite_shader_program_ = ResourceManager::GetShaderProgram("sprite_shader"s);
+	if(!sprite_shader_program_) {
 		std::cerr << "Can't find shader program: "sv << "sprite_shader"sv << std::endl;
 		return false;
 	}
-	start_screen_ = std::make_shared<StartScreen>(ResourceManager::GetStartScreen());
-	level_ = std::make_shared<Level>(ResourceManager::GetLevels()[0]);
-	window_size_.x = static_cast<int>(level_->GetStateWidth());
-	window_size_.y = static_cast<int>(level_->GetStateHeight());
-	Physics::PhysicsEngine::SetCurrentLevel(level_);
-
-	glm::mat4 projection_matrix = glm::ortho(0.f, static_cast<float>(window_size_.x),
-											 0.f, static_cast<float>(window_size_.y),
-											 -100.f, 100.f);
-
-	sprite_shader_program->Use();
-	sprite_shader_program->SetInt("tex"s, 0);
-	sprite_shader_program->SetMatrix4("projection_matrix"s, projection_matrix);
-
-	tank_ = std::make_shared<Tank>(0.05f, level_->GetPlayerRespawn_1(), glm::vec2(Level::BLOCK_SIZE, Level::BLOCK_SIZE), 0.f);
-	Physics::PhysicsEngine::AddDynamicGameObject(tank_);
+	sprite_shader_program_->Use();
+	sprite_shader_program_->SetInt("tex"s, 0);
+	game_state_ = std::make_shared<StartScreen>(ResourceManager::GetStartScreen(), this);
+	SetWindowSize(window_size_);
+	UpdateViewport();	
 	return true;
 }
 
+void Game::StartNewLevel(std::size_t level) {
+	auto new_level = std::make_shared<Level>(ResourceManager::GetLevels()[level]);
+	game_state_ = new_level;
+	Physics::PhysicsEngine::SetCurrentLevel(new_level);	
+	UpdateViewport();
+}
+
 dimension_t Game::GetCurrentWidth() const {
-	switch (state_) {
-	case Game::GameState::StartScreen:
-		return start_screen_->GetStateWidth();
-	case Game::GameState::Level:
-		return level_->GetStateWidth();
-	}
+	return game_state_->GetStateWidth();
 }
 
 dimension_t Game::GetCurrentHeight() const {
-	switch (state_) {
-	case Game::GameState::StartScreen:
-		return start_screen_->GetStateHeight();
-	case Game::GameState::Level:
-		return level_->GetStateHeight();
+	return game_state_->GetStateHeight();
+}
+
+void Game::SetWindowSize(const glm::uvec2 &window_size) {
+	window_size_ = window_size;
+	UpdateViewport();
+}
+
+void Game::UpdateViewport() const {
+	const float level_aspect_ratio = static_cast<float>(GetCurrentWidth()) / GetCurrentHeight();
+	std::uint32_t view_port_width = window_size_.x;
+	std::uint32_t view_port_height = window_size_.y;
+	std::uint32_t view_port_left_offset = 0;
+	std::uint32_t view_port_bottom_offset = 0;
+
+	if (window_size_.x * 1.f / window_size_.y > level_aspect_ratio) {
+		view_port_width = static_cast<uint32_t>(window_size_.y * level_aspect_ratio);
+		view_port_left_offset = (window_size_.x - view_port_width) / 2;
+	} else {
+		view_port_height = static_cast<uint32_t>(window_size_.x / level_aspect_ratio);
+		view_port_bottom_offset = (window_size_.y - view_port_height) / 2;
 	}
+
+	RenderEngine::Renderer::SetViewport(view_port_width, view_port_height, view_port_left_offset, view_port_bottom_offset);
+	glm::mat4 projection_matrix = glm::ortho(0.f, static_cast<float>(GetCurrentWidth()),
+											 0.f, static_cast<float>(GetCurrentWidth()),
+											 -100.f, 100.f);
+	sprite_shader_program_->SetMatrix4("projection_matrix"s, projection_matrix);
 }
